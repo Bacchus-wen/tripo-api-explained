@@ -8,10 +8,10 @@ export function renderTeam(view, { t, L, base, data }) {
   view.innerHTML = `
     <section class="team">
       <div class="run-head">
-        <p class="eyebrow">${t('多 AI 协作', 'Multi-AI collaboration')}</p>
-        <h1>${t('Tripo 出单件，几家 AI 在 Blender 里分工把它做好', 'Tripo makes the pieces; several AIs split the work of finishing them in Blender')}</h1>
-        <p class="muted">${t('Tripo 不是一站式的。它的强项是快速、并行地生成单件底模；复杂场景要先拆成单件，再组合，最后由最擅长的那一家分别修材质、补建模、做氛围。',
-          'Tripo is not one-stop. Its strength is fast, parallel base models per piece; complex scenes are split into pieces, recombined, then each flaw goes to whichever AI is best at it — materials, missing parts, mood.')}</p>
+        <p class="eyebrow">${t('Astra 分工', 'Astra roles')}</p>
+        <h1>${t('Tripo 出单件，Astra 分角色在 Blender 里把它做好', 'Tripo makes the pieces; Astra, in several roles, finishes them in Blender')}</h1>
+        <p class="muted">${t('Tripo 不是一站式的。它的强项是快速、并行地生成单件底模；复杂场景要先拆成单件，再组合，最后由 Astra 的不同角色分别修材质、补建模、做氛围。',
+          'Tripo is not one-stop. Its strength is fast, parallel base models per piece; complex scenes are split into pieces, recombined, then each flaw goes to the Astra role best suited to it — materials, missing parts, mood.')}</p>
       </div>
       <div class="roles roles-5">${collab.roles.map((r) => `
         <div style="--c:${r.color}"><b><i class="swatch"></i>${r.who}</b><span>${L(r.what)}</span></div>`).join('')}</div>

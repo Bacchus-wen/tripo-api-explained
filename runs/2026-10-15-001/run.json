@@ -191,8 +191,8 @@
    "asset": "workshop-printer",
    "status": "ok",
    "summary": {
-    "zh": "Grok 的 inspect_asset.py 只读检查：结果 pass，警告 0 条。",
-    "en": "Grok’s read-only inspect_asset.py: pass, 0 warning(s)."
+    "zh": "结构质检脚本 inspect_asset.py 只读检查：结果 pass，警告 0 条。",
+    "en": "Read-only structural QA script inspect_asset.py: pass, 0 warning(s)."
    },
    "artifacts": [
     {
@@ -248,8 +248,8 @@
    "asset": "workshop-workbench",
    "status": "ok",
    "summary": {
-    "zh": "Grok 的 inspect_asset.py 只读检查：结果 pass，警告 0 条。",
-    "en": "Grok’s read-only inspect_asset.py: pass, 0 warning(s)."
+    "zh": "结构质检脚本 inspect_asset.py 只读检查：结果 pass，警告 0 条。",
+    "en": "Read-only structural QA script inspect_asset.py: pass, 0 warning(s)."
    },
    "artifacts": [
     {
@@ -305,8 +305,8 @@
    "asset": "workshop-critic",
    "status": "ok",
    "summary": {
-    "zh": "Grok 的 inspect_asset.py 只读检查：结果 pass，警告 0 条。",
-    "en": "Grok’s read-only inspect_asset.py: pass, 0 warning(s)."
+    "zh": "结构质检脚本 inspect_asset.py 只读检查：结果 pass，警告 0 条。",
+    "en": "Read-only structural QA script inspect_asset.py: pass, 0 warning(s)."
    },
    "artifacts": [
     {
@@ -362,8 +362,8 @@
    "asset": "workshop-shelf",
    "status": "ok",
    "summary": {
-    "zh": "Grok 的 inspect_asset.py 只读检查：结果 pass，警告 0 条。",
-    "en": "Grok’s read-only inspect_asset.py: pass, 0 warning(s)."
+    "zh": "结构质检脚本 inspect_asset.py 只读检查：结果 pass，警告 0 条。",
+    "en": "Read-only structural QA script inspect_asset.py: pass, 0 warning(s)."
    },
    "artifacts": [
     {
@@ -457,8 +457,8 @@
    "asset": null,
    "status": "warn",
    "summary": {
-    "zh": "第 1 轮：新开的 Claude 子代理对照概念图看四视角渲染，打 6/10，判定退回 Blender 修整。四个道具的造型和摆位基本还原了概念图，物体也都稳稳落在桌面上；但灯光平淡偏冷、缺少紫色发光和暖色主光，传送带只是几块平板，扫描仪的玻璃罩被烘成了不透明灰色半壳，距离可交付还差一轮场景修整和一次扫描仪重生成。",
-    "en": "Round 1: a fresh Claude sub-agent compared the four views with the concept, scored 6/10 and routed it back to Blender. Prop silhouettes and layout broadly match the concept and everything sits on the table, but the lighting is flat and cool with no purple glow or warm key, the belts are plain slabs, and the scanner's glass dome baked into an opaque grey half-shell; it needs a Blender lighting/material pass plus one scanner regeneration before it can ship."
+    "zh": "第 1 轮：一个独立的 AI 评审会话对照概念图看四视角渲染，打 6/10，判定退回 Blender 修整。四个道具的造型和摆位基本还原了概念图，物体也都稳稳落在桌面上；但灯光平淡偏冷、缺少紫色发光和暖色主光，传送带只是几块平板，扫描仪的玻璃罩被烘成了不透明灰色半壳，距离可交付还差一轮场景修整和一次扫描仪重生成。",
+    "en": "Round 1: an independent AI review session compared the four views with the concept, scored 6/10 and routed it back to Blender. Prop silhouettes and layout broadly match the concept and everything sits on the table, but the lighting is flat and cool with no purple glow or warm key, the belts are plain slabs, and the scanner's glass dome baked into an opaque grey half-shell; it needs a Blender lighting/material pass plus one scanner regeneration before it can ship."
    },
    "artifacts": [
     {

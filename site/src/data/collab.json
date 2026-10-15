@@ -2,7 +2,7 @@
  "roles": [
   {
    "id": "opus",
-   "who": "Claude Opus 5.5",
+   "who": "Astra · 规划与搭场景",
    "color": "#e8b07a",
    "what": {
     "zh": "想清楚怎么拆、怎么组合；直接操控 Blender 搭场景、调灯光和氛围、摆镜头；最后拍板通过还是回炉。",
@@ -11,7 +11,7 @@
   },
   {
    "id": "astra",
-   "who": "Codex · Astra",
+   "who": "Astra · 材质与建模",
    "color": "#7cc4ff",
    "what": {
     "zh": "生图做材质：无缝贴图、局部重绘、干净的颜色图；写 Blender 建模脚本，补 Tripo 做不好的部件。",
@@ -29,11 +29,11 @@
   },
   {
    "id": "grok",
-   "who": "Grok",
+   "who": "Astra · 质检与评审",
    "color": "#c9a0e8",
    "what": {
-    "zh": "跑只读结构质检（inspect_asset.py），搜参考；也可以当跨家评审。",
-    "en": "Runs read-only structural QA (inspect_asset.py) and finds references; can act as the cross-vendor critic."
+    "zh": "跑只读结构质检脚本（inspect_asset.py）；另开独立会话看图打分、列问题。",
+    "en": "Runs the read-only structural QA script (inspect_asset.py); a separate session scores renders and lists flaws."
    }
   },
   {
@@ -94,12 +94,12 @@
   {
    "who": "grok",
    "title": {
-    "zh": "跨家评审",
-    "en": "Cross-vendor review"
+    "zh": "独立评审",
+    "en": "Independent review"
    },
    "text": {
-    "zh": "另一家看图打分、列问题（本次实际由独立的 Claude 子代理完成：6 → 6.5 分）。",
-    "en": "Another vendor scores and lists flaws (this run used an independent Claude sub-agent: 6 → 6.5)."
+    "zh": "另开一个独立的 Astra 会话看图打分、列问题（本次实际评审：6 → 6.5 分）。",
+    "en": "A separate Astra session scores the renders and lists flaws (actual review this run: 6 → 6.5)."
    }
   },
   {
@@ -109,8 +109,8 @@
     "en": "Dispatch fixes"
    },
    "text": {
-    "zh": "每个问题交给最合适的那一家，通过 team-sync 任务板派活，互不踩文件。",
-    "en": "Each flaw goes to the best-suited AI via the team-sync task board, without file clashes."
+    "zh": "把每个问题交给最合适的 Astra 角色，通过任务板派活，互不踩文件。",
+    "en": "Each flaw goes to the best-suited Astra role via the task board, without file clashes."
    }
   },
   {
@@ -139,8 +139,8 @@
     "en": "The critic rig's glass dome came out as an opaque shell"
    },
    "how": {
-    "zh": "Astra 写 Blender 脚本，建一个透明玻璃圆柱和发光环，替换掉这个部件；Opus 负责摆位和打光。",
-    "en": "Astra scripts a transparent glass cylinder and glowing ring in Blender to replace that part; Opus places and lights it."
+    "zh": "Astra 写 Blender 脚本，建一个透明玻璃圆柱和发光环替换这个部件，再摆好位置、打好光。",
+    "en": "Astra scripts a transparent glass cylinder and glowing ring in Blender to replace that part, then places and lights it."
    },
    "tripo": {
     "zh": "或者用 Tripo 分件（/mesh/segment，40 credits）把罩子拆出来，再单独换材质。",
@@ -161,8 +161,8 @@
     "en": "Smeared printer texture, black smudges on the shelf castles"
    },
    "how": {
-    "zh": "Astra 生图出干净的颜色图，或对贴图做局部重绘，再由 Opus 接回材质节点。",
-    "en": "Astra generates a clean colour map or repaints the texture; Opus wires it back into the material."
+    "zh": "Astra 生图出干净的颜色图，或对贴图做局部重绘，再接回材质节点。",
+    "en": "Astra generates a clean colour map or repaints the texture, then wires it back into the material."
    },
    "tripo": {
     "zh": "或者用 Tripo 重新贴图（/models/texture，HD 20 credits），传入原参考图。",
@@ -205,8 +205,8 @@
     "en": "Belt routing is wrong; glow and mood are weak"
    },
    "how": {
-    "zh": "Opus 直接操控 Blender：让传送带依次串起四个工位，提高发光强度，加暖色主光、紫色霓虹和景深，调整低机位镜头。",
-    "en": "Opus drives Blender directly: route the belt through all four stations, raise emission, add a warm key, purple neon and depth of field, fix the low-angle camera."
+    "zh": "Astra 直接操控 Blender：让传送带依次串起四个工位，提高发光强度，加暖色主光、紫色霓虹和景深，调整低机位镜头。",
+    "en": "Astra drives Blender directly: route the belt through all four stations, raise emission, add a warm key, purple neon and depth of field, fix the low-angle camera."
    },
    "tripo": {
     "zh": "这类工作不需要 Tripo。",
@@ -227,8 +227,8 @@
     "en": "Needle spikes and messy triangles"
    },
    "how": {
-    "zh": "Opus 在 Blender 里删除游离点和退化面；面数或拓扑要求更高时，交给 Tripo 重拓扑。",
-    "en": "Opus deletes loose verts and degenerate faces in Blender; for stricter budgets hand it to Tripo retopology."
+    "zh": "Astra 在 Blender 里删除游离点和退化面；面数或拓扑要求更高时，交给 Tripo 重拓扑。",
+    "en": "Astra deletes loose verts and degenerate faces in Blender; for stricter budgets it hands the model to Tripo retopology."
    },
    "tripo": {
     "zh": "Tripo 重拓扑 v3.0（/mesh/decimate，三角 35 credits），可以加 smart_uv。",
@@ -245,12 +245,12 @@
    ],
    "owner": "grok",
    "title": {
-    "zh": "评审不应该由同一家来做",
-    "en": "Review shouldn’t come from the same vendor"
+    "zh": "评审不该和搭建出自同一个会话",
+    "en": "Review shouldn’t come from the session that built it"
    },
    "how": {
-    "zh": "下一轮改走 team-sync 任务板，交给 Grok 或 Codex 评审，减少自己给自己打分的偏差。",
-    "en": "Next round goes through the team-sync board to Grok or Codex, avoiding self-grading bias."
+    "zh": "另开一个独立的 Astra 会话专门评审：不看搭建过程，只看图打分，减少自己给自己打分的偏差。",
+    "en": "A separate Astra session does the review: it sees only the renders, not the build process, which reduces self-grading bias."
    },
    "tripo": {
     "zh": "与 Tripo 无关。",

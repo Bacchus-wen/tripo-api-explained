@@ -90,8 +90,8 @@ for p in NAMES:
     if qa:
         status = qa.get('status', 'unknown')
         steps.append({'module': 'structure-qa', 'asset': aid, 'status': {'pass': 'ok', 'warning': 'warn'}.get(status, 'fail'),
-                      'summary': B(f'Grok 的 inspect_asset.py 只读检查：结果 {status}，警告 {len(qa.get("warnings", []))} 条。',
-                                   f'Grok’s read-only inspect_asset.py: {status}, {len(qa.get("warnings", []))} warning(s).'),
+                      'summary': B(f'结构质检脚本 inspect_asset.py 只读检查：结果 {status}，警告 {len(qa.get("warnings", []))} 条。',
+                                   f'Read-only structural QA script inspect_asset.py: {status}, {len(qa.get("warnings", []))} warning(s).'),
                       'artifacts': [{'kind': 'json', 'path': rel(RUN / 'qa' / f'{aid}.json'), 'label': B('QA 报告', 'QA report')}],
                       'metrics': {**(qa.get('model') or {}).get('counts', {}), 'uv_sets': len((qa.get('model') or {}).get('uv_sets', [])),
                                   'not_checked': len(qa.get('not_checked', []))}})
@@ -111,8 +111,8 @@ critic = load(RUN / 'critic.json')
 round1 = load(RUN / 'critic-round1.json')
 if round1:
     steps.append({'module': 'visual-critic', 'asset': None, 'status': 'warn',
-                  'summary': B(f'第 1 轮：新开的 Claude 子代理对照概念图看四视角渲染，打 {round1["score"]}/10，判定退回 Blender 修整。{round1["summary"]["zh"]}',
-                               f'Round 1: a fresh Claude sub-agent compared the four views with the concept, scored {round1["score"]}/10 and routed it back to Blender. {round1["summary"]["en"]}'),
+                  'summary': B(f'第 1 轮：一个独立的 AI 评审会话对照概念图看四视角渲染，打 {round1["score"]}/10，判定退回 Blender 修整。{round1["summary"]["zh"]}',
+                               f'Round 1: an independent AI review session compared the four views with the concept, scored {round1["score"]}/10 and routed it back to Blender. {round1["summary"]["en"]}'),
                   'artifacts': [{'kind': 'image', 'path': 'runs/2026-10-15-001/blender/round1/overview.jpg', 'label': B('第 1 轮总览', 'Round 1 overview')}],
                   'metrics': {'score': f'{round1["score"]}/10', 'verdict': round1.get('verdict'),
                               **{f'flaw_{i + 1}': f'[{x.get("route")}] ' + x['en'][:90] for i, x in enumerate(round1.get('flaws', [])[:7])}}})

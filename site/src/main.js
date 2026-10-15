@@ -38,7 +38,7 @@ function shell() {
         </div>
       </div>
       <nav class="tabs">
-        ${[['hall', '能力馆', 'Feature Hall'], ['team', '多 AI 协作', 'Multi-AI'], ['run', '真实流程', 'Real Run'], ['modules', '产线模块', 'Pipeline']]
+        ${[['hall', '能力馆', 'Feature Hall'], ['team', 'Astra 分工', 'Astra roles'], ['run', '真实流程', 'Real Run'], ['modules', '产线模块', 'Pipeline']]
           .map(([id, zh, en]) => `<a href="#${id}" class="${state.view === id ? 'on' : ''}">${t(zh, en)}</a>`).join('')}
       </nav>
       <button class="lang" id="lang">${state.lang === 'zh' ? 'EN' : '中文'}</button>

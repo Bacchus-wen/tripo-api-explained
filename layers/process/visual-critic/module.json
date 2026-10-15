@@ -13,7 +13,7 @@
   },
   "tools": [
     "Blender four-view renders",
-    "Claude critic sub-agent"
+    "Astra review session"
   ],
   "inputs": [
     {
@@ -40,10 +40,10 @@
   },
   "roles": [
     {
-      "who": "Claude",
+      "who": "Astra",
       "what": {
-        "zh": "新开的独立子代理看四视角图打分、列问题、决定通过或退回",
-        "en": "A fresh, independent sub-agent scores the four views, lists flaws and decides pass or route-back"
+        "zh": "另开一个独立会话看四视角图打分、列问题、决定通过或退回",
+        "en": "A separate session scores the four views, lists flaws and decides pass or route-back"
       }
     }
   ]
