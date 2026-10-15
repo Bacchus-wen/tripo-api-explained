@@ -8,11 +8,12 @@
     "en": "Concept Art & Sign-off"
   },
   "summary": {
-    "zh": "先出整体概念图锁定风格和光影，人确认后再为每个道具出参考图。2D 先对齐，比直接写 3D 便宜得多。",
-    "en": "Generate a whole-scene concept to lock style and lighting, get human sign-off, then make one reference image per prop. Aligning in 2D is far cheaper than iterating in 3D."
+    "zh": "用 Tripo 的 text-to-image 出整体概念图锁定风格和光影，人签字后用 image-to-image 从概念图里抽出每个道具的参考图，保证风格统一。2D 先对齐，比直接改 3D 便宜得多。",
+    "en": "Tripo text-to-image makes a whole-scene concept to lock style and lighting; after human sign-off, image-to-image extracts a reference per prop from that concept so every asset shares one style. Aligning in 2D is far cheaper than iterating in 3D."
   },
   "tools": [
-    "GPT Image (game-assets MCP)"
+    "Tripo API text-to-image",
+    "Tripo API image-to-image"
   ],
   "inputs": [
     {
