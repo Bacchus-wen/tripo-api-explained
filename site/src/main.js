@@ -29,6 +29,7 @@ let mounted = null;
 let cleanupView = null;
 
 function shell() {
+  document.title = t('Tripo API 图解', 'Tripo API, Explained');
   app.innerHTML = `
     <header class="top">
       <a class="brand" href="#home">

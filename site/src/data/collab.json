@@ -2,7 +2,10 @@
  "roles": [
   {
    "id": "opus",
-   "who": "Astra · 规划与搭场景",
+   "who": {
+    "zh": "Astra · 规划与搭场景",
+    "en": "Astra · Planning & scene"
+   },
    "color": "#e8b07a",
    "what": {
     "zh": "想清楚怎么拆、怎么组合；直接操控 Blender 搭场景、调灯光和氛围、摆镜头；最后拍板通过还是回炉。",
@@ -11,7 +14,10 @@
   },
   {
    "id": "astra",
-   "who": "Astra · 材质与建模",
+   "who": {
+    "zh": "Astra · 材质与建模",
+    "en": "Astra · Materials & modelling"
+   },
    "color": "#7cc4ff",
    "what": {
     "zh": "生图做材质：无缝贴图、局部重绘、干净的颜色图；写 Blender 建模脚本，补 Tripo 做不好的部件。",
@@ -20,7 +26,10 @@
   },
   {
    "id": "tripo",
-   "who": "Tripo API",
+   "who": {
+    "zh": "Tripo API",
+    "en": "Tripo API"
+   },
    "color": "#3fa7a0",
    "what": {
     "zh": "快速批量出单件底模；需要时用分件、重贴图、重拓扑、绑骨等后处理接口。",
@@ -29,7 +38,10 @@
   },
   {
    "id": "grok",
-   "who": "Astra · 质检与评审",
+   "who": {
+    "zh": "Astra · 质检与评审",
+    "en": "Astra · QA & review"
+   },
    "color": "#c9a0e8",
    "what": {
     "zh": "跑只读结构质检脚本（inspect_asset.py）；另开独立会话看图打分、列问题。",
@@ -38,7 +50,10 @@
   },
   {
    "id": "blender",
-   "who": "Blender",
+   "who": {
+    "zh": "Blender",
+    "en": "Blender"
+   },
    "color": "#e07a3f",
    "what": {
     "zh": "所有修改真正发生的地方：无界面脚本执行、渲染、导出验证。",

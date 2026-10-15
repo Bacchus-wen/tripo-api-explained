@@ -14,10 +14,10 @@ export function renderTeam(view, { t, L, base, data }) {
           'Tripo is not one-stop. Its strength is fast, parallel base models per piece; complex scenes are split into pieces, recombined, then each flaw goes to the Astra role best suited to it — materials, missing parts, mood.')}</p>
       </div>
       <div class="roles roles-5">${collab.roles.map((r) => `
-        <div style="--c:${r.color}"><b><i class="swatch"></i>${r.who}</b><span>${L(r.what)}</span></div>`).join('')}</div>
+        <div style="--c:${r.color}"><b><i class="swatch"></i>${L(r.who)}</b><span>${L(r.what)}</span></div>`).join('')}</div>
       <ol class="flow">${collab.flow.map((f, i) => `
         <li style="--c:${role[f.who].color}"><span class="flow-n">${i + 1}</span><b>${L(f.title)}</b>
-          <small>${role[f.who].who}</small><p>${L(f.text)}</p></li>`).join('')}</ol>
+          <small>${L(role[f.who].who)}</small><p>${L(f.text)}</p></li>`).join('')}</ol>
       <h2 class="team-h2">${t('同一个场景，问题分给谁修', 'One scene: who fixes what')}</h2>
       <p class="muted">${t('下面是这次真实运行组装好的场景和评审指出的问题。点一个问题，看它交给哪一家、怎么修，以及用 Tripo 哪个功能也能修。',
         'The scene assembled in the real run, with the flaws the critic found. Pick one to see who fixes it, how, and which Tripo feature could also fix it.')}</p>
@@ -25,7 +25,7 @@ export function renderTeam(view, { t, L, base, data }) {
         <div class="viewer"><div class="stage-inner" id="team-viewer"></div></div>
         <div class="fixes">${collab.fixes.map((f) => `
           <button class="fix" data-id="${f.id}" style="--c:${role[f.owner].color}">
-            <span class="fix-owner">${role[f.owner].who}</span><b>${L(f.title)}</b></button>`).join('')}
+            <span class="fix-owner">${L(role[f.owner].who)}</span><b>${L(f.title)}</b></button>`).join('')}
           <div class="fix-detail" id="fix-detail"></div>
         </div>
       </div>
@@ -63,7 +63,7 @@ export function renderTeam(view, { t, L, base, data }) {
     const r = role[f.owner];
     view.querySelectorAll('.fix').forEach((b) => b.classList.toggle('on', b.dataset.id === id));
     detail.innerHTML = `
-      <h5>${t('交给', 'Owner')}</h5><p><b style="color:${r.color}">${r.who}</b></p>
+      <h5>${t('交给', 'Owner')}</h5><p><b style="color:${r.color}">${L(r.who)}</b></p>
       <h5>${t('怎么修', 'How')}</h5><p>${L(f.how)}</p>
       <h5>${t('Tripo 的替代做法', 'Tripo alternative')}</h5><p class="muted">${L(f.tripo)}</p>
       ${f.tripoFeature ? `<a class="doc" href="#hall" data-feature="${f.tripoFeature}">${t('在能力馆里看这个功能', 'See this feature in the Hall')} →</a>` : ''}`;

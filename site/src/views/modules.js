@@ -8,10 +8,10 @@ const LAYERS = [
 
 export function renderModules(view, { t, L, data }) {
   const roles = [
-    ['Astra · 规划', t('拆解与编排、操控 Blender 搭场景和氛围、入库前拍板', 'Decomposition and orchestration, drives Blender for scene and mood, final call before the library')],
-    ['Astra · 材质与建模', t('生图做材质、写 Blender 脚本补建模', 'Images for materials, Blender scripts for missing parts')],
+    [t('Astra · 规划', 'Astra · Planning'), t('拆解与编排、操控 Blender 搭场景和氛围、入库前拍板', 'Decomposition and orchestration, drives Blender for scene and mood, final call before the library')],
+    [t('Astra · 材质与建模', 'Astra · Materials & modelling'), t('生图做材质、写 Blender 脚本补建模', 'Images for materials, Blender scripts for missing parts')],
     ['Tripo API', t('出图与建模：文生图、图生图、图生 3D', 'Images and models: text-to-image, image-to-image, image-to-3D')],
-    ['Astra · 质检与评审', t('跑只读结构质检脚本，另开会话看图评审', 'Runs the read-only structural QA script; a separate session reviews the renders')],
+    [t('Astra · 质检与评审', 'Astra · QA & review'), t('跑只读结构质检脚本，另开会话看图评审', 'Runs the read-only structural QA script; a separate session reviews the renders')],
     ['Blender', t('无界面脚本：清理、组装、渲染、导出验证', 'Headless scripts: clean, assemble, render, export checks')],
   ];
   view.innerHTML = `
