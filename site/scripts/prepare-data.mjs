@@ -74,7 +74,7 @@ const llms = [
   ...api.features.map((f) => `- ${f.name.en} (${f.endpoint}) [${f.status}]: ${f.what.en}`),
   '',
   '## Pipeline modules',
-  ...modules.map((m) => `- [${m.name.en}](/docs/modules/${m.id}.md) [${m.layer}, ${m.status}]: ${m.summary.en}`),
+  ...modules.map((m) => `- [${m.name.en}](docs/modules/${m.id}.md) [${m.layer}, ${m.status}]: ${m.summary.en}`),
   '',
   '## Real runs',
   ...runs.map((r) => `- ${r.order_id}: ${r.title.en} (${r.status})`),

@@ -18,20 +18,20 @@ API base: https://openapi.tripo3d.ai/v3
 - How a task runs (POST /files · GET /tasks/{task_id}) [verified]: Every generation is an async task: submit, get a task_id, poll, download soon after success.
 
 ## Pipeline modules
-- [Brief & Order](/docs/modules/order-brief.md) [create, live]: Turns a one-line request into an asset list in a single order JSON: objects, style, references, real-world size, face budget, targets and budget. Every downstream step follows the order.
-- [Concept Art & Sign-off](/docs/modules/concept-art.md) [create, live]: Tripo text-to-image makes a whole-scene concept to lock style and lighting; after human sign-off, image-to-image extracts a reference per prop from that concept so every asset shares one style. Aligning in 2D is far cheaper than iterating in 3D.
-- [Tripo Image-to-3D](/docs/modules/tripo-generate.md) [generate, live]: Calls the Tripo API with a prop reference to produce a model with PBR textures. Best for characters, creatures, organic shapes and complex hero props.
-- [Procedural Geometry](/docs/modules/procedural-geometry.md) [generate, live]: Tables, bases, belts and repeated parts are generated in code: precise, tweakable and free.
-- [Structural QA](/docs/modules/structure-qa.md) [process, live]: Read-only checks on the raw glb: meshes, triangle count, UVs, materials and textures. A structural report does not replace art or Blender checks.
-- [Blender Cleanup & Assembly](/docs/modules/blender-cleanup.md) [process, live]: Headless Blender scripts normalise real-world scale, move pivots to the base, recalculate normals, decimate over budget, assemble the scene from the plan, then export and re-import to verify.
-- [Four-View Critic](/docs/modules/visual-critic.md) [process, live]: Renders overview, close-up, low-angle and wireframe views; an independent critic lists at least three concrete flaws and scores the scene, routing failures back to the right step.
-- [Asset Library](/docs/modules/asset-library.md) [library, live]: Every asset is stored as glb plus meta.json with source, order, size, triangle count and QA results. Downstream scenes only take from here.
-- [Blender Showcase](/docs/modules/blender-showcase.md) [apps, live]: Lighting, cameras and turntables are script templates: drop an asset in, get stills and video out.
-- [Web three.js](/docs/modules/web-threejs.md) [apps, live]: Loads glb directly in the browser. The site you are looking at is this module's output.
-- [Unreal Engine Scene](/docs/modules/ue-scene.md) [apps, planned]: Builds Unreal scenes from library assets via Epic's Unreal MCP.
-- [TouchDesigner FX](/docs/modules/td-fx.md) [apps, planned]: Brings assets into real-time visuals via TouchDesigner MCP.
-- [Promo Video](/docs/modules/promo-video.md) [apps, planned]: Astra writes the script and storyboard; Seedance generates a promo clip referencing the showcase renders.
-- [Ambient Audio](/docs/modules/ambient-audio.md) [apps, planned]: ElevenLabs generates ambience and sound effects for showcase videos and web scenes.
+- [Brief & Order](docs/modules/order-brief.md) [create, live]: Turns a one-line request into an asset list in a single order JSON: objects, style, references, real-world size, face budget, targets and budget. Every downstream step follows the order.
+- [Concept Art & Sign-off](docs/modules/concept-art.md) [create, live]: Tripo text-to-image makes a whole-scene concept to lock style and lighting; after human sign-off, image-to-image extracts a reference per prop from that concept so every asset shares one style. Aligning in 2D is far cheaper than iterating in 3D.
+- [Tripo Image-to-3D](docs/modules/tripo-generate.md) [generate, live]: Calls the Tripo API with a prop reference to produce a model with PBR textures. Best for characters, creatures, organic shapes and complex hero props.
+- [Procedural Geometry](docs/modules/procedural-geometry.md) [generate, live]: Tables, bases, belts and repeated parts are generated in code: precise, tweakable and free.
+- [Structural QA](docs/modules/structure-qa.md) [process, live]: Read-only checks on the raw glb: meshes, triangle count, UVs, materials and textures. A structural report does not replace art or Blender checks.
+- [Blender Cleanup & Assembly](docs/modules/blender-cleanup.md) [process, live]: Headless Blender scripts normalise real-world scale, move pivots to the base, recalculate normals, decimate over budget, assemble the scene from the plan, then export and re-import to verify.
+- [Four-View Critic](docs/modules/visual-critic.md) [process, live]: Renders overview, close-up, low-angle and wireframe views; an independent critic lists at least three concrete flaws and scores the scene, routing failures back to the right step.
+- [Asset Library](docs/modules/asset-library.md) [library, live]: Every asset is stored as glb plus meta.json with source, order, size, triangle count and QA results. Downstream scenes only take from here.
+- [Blender Showcase](docs/modules/blender-showcase.md) [apps, live]: Lighting, cameras and turntables are script templates: drop an asset in, get stills and video out.
+- [Web three.js](docs/modules/web-threejs.md) [apps, live]: Loads glb directly in the browser. The site you are looking at is this module's output.
+- [Unreal Engine Scene](docs/modules/ue-scene.md) [apps, planned]: Builds Unreal scenes from library assets via Epic's Unreal MCP.
+- [TouchDesigner FX](docs/modules/td-fx.md) [apps, planned]: Brings assets into real-time visuals via TouchDesigner MCP.
+- [Promo Video](docs/modules/promo-video.md) [apps, planned]: Astra writes the script and storyboard; Seedance generates a promo clip referencing the showcase renders.
+- [Ambient Audio](docs/modules/ambient-audio.md) [apps, planned]: ElevenLabs generates ambience and sound effects for showcase videos and web scenes.
 
 ## Real runs
 - 2026-10-15-001: AI Pipeline Workshop: one real run (complete)

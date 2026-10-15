@@ -48,7 +48,7 @@ function shell() {
     <footer class="foot">
       <span>${t('数据来自 Tripo V3 官方文档与本项目的真实调用记录。', 'Data from the official Tripo V3 docs and this project’s real API calls.')}</span>
       <a href="${api.docs}" target="_blank" rel="noopener">developers.tripo3d.ai</a>
-      <a href="/llms.txt">llms.txt</a>
+      <a href="${import.meta.env.BASE_URL}llms.txt">llms.txt</a>
     </footer>`;
   document.getElementById('lang').onclick = () => {
     state.lang = state.lang === 'zh' ? 'en' : 'zh';

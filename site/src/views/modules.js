@@ -31,7 +31,7 @@ export function renderModules(view, { t, L, data }) {
                 <span class="chip chip-${m.status === 'live' ? 'verified' : 'unconfirmed'}">${m.status === 'live' ? t('已跑通', 'Live') : t('规划中', 'Planned')}</span></div>
               <p>${L(m.summary)}</p>
               <div class="tools">${m.tools.map((x) => `<code>${x}</code>`).join('')}</div>
-              <a class="doc" href="/docs/modules/${m.id}.md" target="_blank">${t('纯文本说明', 'Plain-text spec')} →</a>
+              <a class="doc" href="${import.meta.env.BASE_URL}docs/modules/${m.id}.md" target="_blank">${t('纯文本说明', 'Plain-text spec')} →</a>
             </div>`).join('')}
         </div>`).join('')}</div>
     </section>`;
