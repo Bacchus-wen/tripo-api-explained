@@ -7,7 +7,7 @@ const URL = process.env.SITE_URL || 'http://localhost:4173/';
 const CJK = /[㐀-鿿]/;
 const browser = await chromium.launch({ args: ['--use-gl=angle'] });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-await page.goto(URL);
+await page.goto(URL, { waitUntil: 'domcontentloaded' });
 await page.evaluate(() => localStorage.setItem('lang', 'en'));
 
 const grab = async (label, waits = [3000]) => {
@@ -25,12 +25,12 @@ const grab = async (label, waits = [3000]) => {
 };
 
 for (const view of ['home', 'team', 'run', 'modules']) {
-  await page.goto(`${URL}#${view}`);
-  await page.reload();
+  await page.goto(`${URL}#${view}`, { waitUntil: 'domcontentloaded' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
   await grab(`view: ${view}`);
 }
-await page.goto(`${URL}#hall`);
-await page.reload();
+await page.goto(`${URL}#hall`, { waitUntil: 'domcontentloaded' });
+await page.reload({ waitUntil: 'domcontentloaded' });
 for (const f of api.features) {
   await page.click(`.feat[data-id="${f.id}"]`);
   // click every button inside the demo once to reveal state-dependent text
