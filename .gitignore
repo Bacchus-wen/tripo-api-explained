@@ -7,3 +7,5 @@ site/public/data/
 *.blend1
 site/qa/
 site/harness/
+runs/*/blender/*.blend
+runs/*/drive_state.json

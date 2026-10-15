@@ -10,7 +10,7 @@ PLAN = [  # id, x (m), height (m)
     ('printer', -0.55, 0.28),
     ('workbench', -0.18, 0.22),
     ('critic', 0.18, 0.26),
-    ('shelf', 0.55, 0.40),
+    ('shelf', 0.55, 0.34),
 ]
 ROT = {'printer': -90, 'shelf': -90}
 props = []
@@ -26,9 +26,9 @@ layout = {
     'belt': {'height_m': 0.045, 'width_m': 0.06},
     'props': props,
     'cameras': {
-        'overview': {'loc': [0.95, -1.4, 0.85], 'target': [0, 0, 0.12], 'lens': 40},
+        'overview': {'loc': [0.9, -1.25, 0.75], 'target': [0.04, -0.02, 0.12], 'lens': 38},
         'closeup': {'loc': [-0.8, -0.6, 0.38], 'target': [-0.55, 0, 0.13], 'lens': 50},
-        'low_angle': {'loc': [0.05, -1.45, 0.06], 'target': [0, 0, 0.09], 'lens': 35},
+        'low_angle': {'loc': [0.55, -1.0, 0.09], 'target': [0, 0, 0.11], 'lens': 40},
     },
 }
 RUN.mkdir(parents=True, exist_ok=True)

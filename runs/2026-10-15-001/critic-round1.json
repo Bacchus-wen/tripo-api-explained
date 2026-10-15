@@ -1,0 +1,37 @@
+{"score": 6,
+ "verdict": "fix-blender",
+ "summary": {
+  "zh": "四个道具的造型和摆位基本还原了概念图，物体也都稳稳落在桌面上；但灯光平淡偏冷、缺少紫色发光和暖色主光，传送带只是几块平板，扫描仪的玻璃罩被烘成了不透明灰色半壳，距离可交付还差一轮场景修整和一次扫描仪重生成。",
+  "en": "Prop silhouettes and layout broadly match the concept and everything sits on the table, but the lighting is flat and cool with no purple glow or warm key, the belts are plain slabs, and the scanner's glass dome baked into an opaque grey half-shell; it needs a Blender lighting/material pass plus one scanner regeneration before it can ship."
+ },
+ "flaws": [
+  {"zh": "灯光和氛围不对：概念图是左上暖色主光加深色暗角、扫描仪紫色霓虹光晕、台灯点亮；渲染是均匀偏冷的平光，扫描仪光环只是淡紫色材质、不发光，台灯也不亮，打印机舱内的橙光很弱。",
+   "en": "Lighting/mood miss: the concept has a warm top-left key, dark vignette, purple neon glow from the scanner and a lit desk lamp; the render is even, cool, flat light, the scanner ring is a pale lavender diffuse (not emissive), the lamp is off and the printer's orange interior glow is weak.",
+   "route": "blender-cleanup"},
+  {"zh": "桌面颜色错误：概念图是深橙棕色胡桃木，有明显木纹和高光；程序化木材呈浅粉米色、木纹几乎看不到，整体色板被冲淡。",
+   "en": "Table palette wrong: the concept is a saturated orange-brown walnut with visible grain and sheen; the procedural wood reads pale pink-beige with almost no grain, washing out the whole palette.",
+   "route": "blender-cleanup"},
+  {"zh": "传送带不像传送带：只是带两条腿的深灰平板，没有皮带、滚轮和侧框，而且是彼此断开的短段，没有像概念图那样把打印机、工作台、扫描仪、货架连成一条流水线；上面的方块是奶白色、不发光，概念图里是亮橙色发光方块。",
+   "en": "Belts don't read as conveyors: they are flat dark slabs on two legs with no belt surface, rollers or side rails, and they are short disconnected segments instead of one line linking printer, bench, scanner and shelf; the cubes are cream/white and unlit instead of glowing orange.",
+   "route": "blender-cleanup"},
+  {"zh": "扫描仪模型问题：概念图是透明玻璃圆柱加紫色光环，龙在罩内；Tripo 把它生成成不透明的灰色后半壳，龙坐在壳外，侧面还多出一个悬空的相机镜头；相机只有 3 台（概念图 4 台）。单网格内无法单独替换成玻璃材质。",
+   "en": "Scanner mesh is wrong: the concept is a transparent glass cylinder with a purple ring and the dragon inside; Tripo produced an opaque grey back half-shell with the dragon sitting outside it, an orphan camera lens stuck to the side, and only 3 tripod cameras instead of 4. The glass can't be re-materialed because it is fused into one mesh.",
+   "route": "tripo-generate"},
+  {"zh": "贴图质量：特写中打印机贴图有涂抹和斑驳，舱内右侧有一块蓝色拉伸污迹，顶部格栅糊掉；货架上城堡模型顶部有黑色脏块；渲染有明显颗粒噪点（采样不足或未开降噪）。",
+   "en": "Texture/surface quality: in the closeup the printer texture is smeary and blotchy, with a stretched blue smear on the right chamber wall and a mushy top vent; the shelf castles have black smudges on their tops; the render shows visible grain (low samples or no denoise).",
+   "route": "blender-cleanup"},
+  {"zh": "线框问题：Tripo 网格是密集且杂乱的三角面，打印机顶部、工作台右侧、扫描仪底座等处有几根细长的尖刺边（退化三角面或游离顶点），应删除松散几何和退化面。",
+   "en": "Wireframe: dense, chaotic triangle soup typical of Tripo, with several long needle spikes (degenerate tris or stray verts) sticking out of the printer top, the bench's right side and the scanner base; delete loose/degenerate geometry.",
+   "route": "blender-cleanup"},
+  {"zh": "构图和比例：总览镜头上方和左侧留白太多，桌子没有填满画面；低角度镜头是正侧面，地平线切在画面中间，下半部全空；货架约为打印机的两倍高，比概念图更压画面。没有接触阴影，物体略显“贴图感”。",
+   "en": "Composition/scale: the overview leaves large empty space top and left instead of filling the frame with the table; the low angle is dead side-on with the horizon at mid-frame and an empty bottom half; the shelf is about 2x the printer's height, more dominant than in the concept; weak contact shadows make props look pasted on.",
+   "route": "blender-cleanup"}
+ ],
+ "strengths": [
+  {"zh": "四个道具的整体造型、配色分区（青色打印机、橙色工作台、灰色货架）和从左到右的摆放顺序都忠实于概念图。",
+   "en": "All four props match the concept's silhouettes, color blocking (teal printer, orange bench, grey shelf) and left-to-right order."},
+  {"zh": "低角度视图显示所有道具、传送带和方块都落在桌面上，没有悬浮或穿插。",
+   "en": "The low-angle view shows every prop, belt and cube resting on the table, with no floating or sinking."},
+  {"zh": "货架上的小模型（龙、城堡、树、骑士、纸箱）细节丰富、数量和排布与概念图一致；把法线重算改为 dry run 后，之前的黑色破面已消失。",
+   "en": "The shelf contents (dragons, castles, trees, knights, boxes) are detailed and match the concept's count and layout; the earlier dark broken patches are gone since normal recalculation became a dry run."}
+ ]}

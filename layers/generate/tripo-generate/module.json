@@ -36,6 +36,6 @@
   "station": {
     "color": "#3fa7a0",
     "icon": "printer",
-    "model": null
+    "model": "library/workshop-printer/model.glb"
   }
 }

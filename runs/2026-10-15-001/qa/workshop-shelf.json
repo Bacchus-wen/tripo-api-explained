@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "input_path": "/Users/wenbin/Desktop/tripo工作流/assets/generated/models/tripo-b6985ca8e1b6c0f64fc46115/model.glb",
+  "file_type": "glb",
+  "bytes": 2999232,
+  "sha256": "d3e612502b2312053e5899e835a8ab08833a48c79159bddd8eb075f121c6e34b",
+  "status": "pass",
+  "error_class": null,
+  "checks": [
+    {
+      "id": "input_readable",
+      "result": "pass",
+      "detail": "2999232 bytes"
+    },
+    {
+      "id": "glb_header",
+      "result": "pass",
+      "detail": "version 2, declared length 2999232"
+    },
+    {
+      "id": "glb_length",
+      "result": "pass",
+      "detail": "2999232 bytes"
+    },
+    {
+      "id": "glb_chunks",
+      "result": "pass",
+      "detail": "2 chunk(s)"
+    },
+    {
+      "id": "glb_json",
+      "result": "pass",
+      "detail": "JSON chunk parsed"
+    },
+    {
+      "id": "glb_references",
+      "result": "pass",
+      "detail": "3 texture link(s)"
+    }
+  ],
+  "warnings": [],
+  "not_checked": [
+    {
+      "item": "face_count",
+      "reason": "Accessor and index counts were not converted into a face count. Compressed meshes are not expanded."
+    },
+    {
+      "item": "uv_seams",
+      "reason": "UV seam continuity was not measured."
+    },
+    {
+      "item": "art_quality",
+      "reason": "Art direction and visual quality were not judged."
+    },
+    {
+      "item": "color_space",
+      "reason": "Color space was not measured."
+    },
+    {
+      "item": "engine_support",
+      "reason": "Engine and DCC import were not run."
+    },
+    {
+      "item": "material_appearance",
+      "reason": "Material appearance was not previewed."
+    },
+    {
+      "item": "texture_usability",
+      "reason": "A saved image or a model file does not show that a GPT texture is bound and usable."
+    },
+    {
+      "item": "image_alpha",
+      "reason": "Alpha was not read because this file is not a decoded image."
+    }
+  ],
+  "image": null,
+  "model": {
+    "version": 2,
+    "declared_length": 2999232,
+    "chunks": [
+      {
+        "type": "JSON",
+        "offset": 12,
+        "length": 2072,
+        "end": 2092
+      },
+      {
+        "type": "BIN",
+        "offset": 2092,
+        "length": 2997132,
+        "end": 2999232
+      }
+    ],
+    "counts": {
+      "meshes": 1,
+      "materials": 1,
+      "textures": 3,
+      "animations": 0,
+      "images": 3,
+      "nodes": 1
+    },
+    "extensions_used": [],
+    "extensions_required": [],
+    "external_references": [],
+    "uv_sets": [
+      "TEXCOORD_0"
+    ],
+    "material_texture_links": [
+      {
+        "material_index": 0,
+        "material_name": "tripo_material_1089f756-c000-4eee-a0b0-abaf3d00ff3f",
+        "slot": "baseColorTexture",
+        "texture_index": 0,
+        "tex_coord": 0,
+        "image_index": 0,
+        "image_uri": null,
+        "image_exists": true
+      },
+      {
+        "material_index": 0,
+        "material_name": "tripo_material_1089f756-c000-4eee-a0b0-abaf3d00ff3f",
+        "slot": "metallicRoughnessTexture",
+        "texture_index": 1,
+        "tex_coord": 0,
+        "image_index": 1,
+        "image_uri": null,
+        "image_exists": true
+      },
+      {
+        "material_index": 0,
+        "material_name": "tripo_material_1089f756-c000-4eee-a0b0-abaf3d00ff3f",
+        "slot": "normalTexture",
+        "texture_index": 2,
+        "tex_coord": 0,
+        "image_index": 2,
+        "image_uri": null,
+        "image_exists": true
+      }
+    ],
+    "missing_image_references": [],
+    "compressed_mesh": false,
+    "face_count": null
+  }
+}

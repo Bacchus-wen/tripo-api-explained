@@ -1,0 +1,26 @@
+{
+ "id": "workshop-printer",
+ "name": {
+  "zh": "Tripo 打印机",
+  "en": "Tripo printer"
+ },
+ "order_id": "2026-10-15-001",
+ "source": "tripo image-to-model v3.1-20260211",
+ "raw_model": "assets/generated/models/tripo-b94758708e1b837a724f2c18/model.glb",
+ "model": "library/workshop-printer/model.glb",
+ "units": "metres",
+ "pivot": "bottom-centre",
+ "dimensions_m": [
+  0.2596,
+  0.2053,
+  0.28
+ ],
+ "triangles": 8062,
+ "materials": [
+  "tripo_material_63661135-b906-42bb-bd63-a3e2cd1d9b14"
+ ],
+ "normals_recalc_would_flip": 2858,
+ "structure_qa": "pass",
+ "critic_score": 6.5,
+ "license": "Tripo generated asset; check Tripo terms before commercial use"
+}

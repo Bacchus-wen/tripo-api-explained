@@ -1,0 +1,32 @@
+{
+  "operation_id": "workshop-printer-model-v1",
+  "run_dir": "/Users/wenbin/Desktop/tripo工作流/assets/generated/models/tripo-b94758708e1b837a724f2c18",
+  "source_path": "/Users/wenbin/Desktop/tripo工作流/assets/generated/tripo-images/prop-printer-ref-v1/image.png",
+  "source_sha256": "e397016e9ec35b19275b86e3d1b170e4078c4996ef9235d70aa186810ee6df39",
+  "source_size": 1232617,
+  "source_mime": "image/png",
+  "source_dimensions": [
+    1024,
+    1024
+  ],
+  "model": "v3.1-20260211",
+  "params": {
+    "texture": true,
+    "pbr": true,
+    "face_limit": 10000,
+    "export_uv": true
+  },
+  "request_sha256": "6acc08c8bef57532fa25b9ac4e59577d3e07c2c38dd13e921920b55f9b60517b",
+  "status": "downloaded_pending_review",
+  "usable": false,
+  "created_at": "2026-10-15T07:44:42.852892+00:00",
+  "updated_at": "2026-10-15T07:48:44.721959+00:00",
+  "source_snapshot": "/Users/wenbin/Desktop/tripo工作流/assets/generated/models/tripo-b94758708e1b837a724f2c18/source.png",
+  "file_token": "file_ea7c1876-ad07-4f35-96e4-b92869a5893b",
+  "task_id": "63661135-b906-42bb-bd63-a3e2cd1d9b14",
+  "remote_status": "success",
+  "progress": 100,
+  "model_path": "/Users/wenbin/Desktop/tripo工作流/assets/generated/models/tripo-b94758708e1b837a724f2c18/model.glb",
+  "model_sha256": "7191eac73b9f872b5423801b83378577facfcdc56212419f4f98b85dba1179e9",
+  "model_size": 3027892
+}

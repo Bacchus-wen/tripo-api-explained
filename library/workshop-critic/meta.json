@@ -1,0 +1,26 @@
+{
+ "id": "workshop-critic",
+ "name": {
+  "zh": "四机位评审台",
+  "en": "Four-camera critic rig"
+ },
+ "order_id": "2026-10-15-001",
+ "source": "tripo image-to-model v3.1-20260211",
+ "raw_model": "assets/generated/models/tripo-9d65593a59b81cf1ec0c998a/model.glb",
+ "model": "library/workshop-critic/model.glb",
+ "units": "metres",
+ "pivot": "bottom-centre",
+ "dimensions_m": [
+  0.2524,
+  0.2971,
+  0.26
+ ],
+ "triangles": 9545,
+ "materials": [
+  "tripo_material_9d774b22-40a7-41f7-9d16-40b99e58cc27"
+ ],
+ "normals_recalc_would_flip": 2468,
+ "structure_qa": "pass",
+ "critic_score": 6.5,
+ "license": "Tripo generated asset; check Tripo terms before commercial use"
+}

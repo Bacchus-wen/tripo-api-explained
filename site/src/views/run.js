@@ -62,7 +62,15 @@ export function renderRun(view, { t, L, base, data }) {
       current.scale.setScalar(s);
       const c = box.getCenter(new stage.THREE.Vector3()).multiplyScalar(s);
       current.position.set(-c.x, -box.min.y * s, -c.z);
-      current.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+      // Blender's procedural wood/glow node trees do not survive glTF export; restore them by material name.
+      current.traverse((o) => {
+        if (!o.isMesh) return;
+        o.castShadow = true;
+        o.receiveShadow = true;
+        const name = o.material?.name || '';
+        if (name.startsWith('wood')) o.material.color.set(0x7a3f1c);
+        if (name.startsWith('glow')) o.material.emissive.set(0xff6a00);
+      });
       stage.scene.add(current);
       stage.controls.target.set(0, size.y * s * 0.4, 0);
     });

@@ -1,0 +1,566 @@
+{
+ "order_id": "2026-10-15-001",
+ "title": {
+  "zh": "AI 产线微缩车间：一次真实运行",
+  "en": "AI Pipeline Workshop: one real run"
+ },
+ "note": {
+  "zh": "这是参考案例。所有数字来自真实调用；没跑通或效果不好的地方如实标出，网站里的功能演示另用 three.js 模拟。",
+  "en": "A reference case. Every number comes from real calls; anything that failed or looks weak is marked honestly. The feature demos elsewhere on this site are simulated in three.js."
+ },
+ "status": "complete",
+ "assets": [
+  {
+   "id": "workshop-printer",
+   "name": {
+    "zh": "Tripo 打印机",
+    "en": "Tripo printer"
+   },
+   "route": "tripo",
+   "model": "library/workshop-printer/model.glb"
+  },
+  {
+   "id": "workshop-workbench",
+   "name": {
+    "zh": "Blender 工作台",
+    "en": "Blender workbench"
+   },
+   "route": "tripo",
+   "model": "library/workshop-workbench/model.glb"
+  },
+  {
+   "id": "workshop-critic",
+   "name": {
+    "zh": "四机位评审台",
+    "en": "Four-camera critic rig"
+   },
+   "route": "tripo",
+   "model": "library/workshop-critic/model.glb"
+  },
+  {
+   "id": "workshop-shelf",
+   "name": {
+    "zh": "资产库货架",
+    "en": "Library shelf"
+   },
+   "route": "tripo",
+   "model": "library/workshop-shelf/model.glb"
+  }
+ ],
+ "scene": {
+  "model": "library/workshop-scene/scene.glb",
+  "renders": [
+   "runs/2026-10-15-001/blender/overview.png",
+   "runs/2026-10-15-001/blender/closeup.png",
+   "runs/2026-10-15-001/blender/low_angle.png",
+   "runs/2026-10-15-001/blender/wireframe.png"
+  ]
+ },
+ "steps": [
+  {
+   "module": "order-brief",
+   "asset": null,
+   "status": "ok",
+   "summary": {
+    "zh": "一句需求拆成 4 个 Tripo 道具 + 程序化桌面，写明尺寸、面数和预算（图片 6 张、建模 5 次）。",
+    "en": "One request split into 4 Tripo props + a procedural table, with sizes, face budgets and a budget (6 images, 5 models)."
+   },
+   "artifacts": [
+    {
+     "kind": "json",
+     "path": "orders/2026-10-15-001.json",
+     "label": {
+      "zh": "订单 JSON",
+      "en": "Order JSON"
+     }
+    }
+   ]
+  },
+  {
+   "module": "concept-art",
+   "asset": null,
+   "status": "ok",
+   "summary": {
+    "zh": "Tripo text-to-image 出整体概念图，用户签字通过。另一个国内图片网关在开 VPN 时连不上，于是整条图片链路改走 Tripo 官方 API。",
+    "en": "Tripo text-to-image made the whole-scene concept; the user signed it off. A China-only image gateway failed behind a VPN, so all image work moved to the official Tripo API."
+   },
+   "artifacts": [
+    {
+     "kind": "image",
+     "path": "assets/generated/tripo-images/workshop-concept-v2/image.png",
+     "label": {
+      "zh": "整体概念图",
+      "en": "Scene concept"
+     }
+    }
+   ],
+   "metrics": {
+    "model": "chat_image_2.5_flare",
+    "size": "1536x1024",
+    "seconds": 24.6,
+    "credits": 10.0
+   },
+   "cost": {
+    "kind": "tripo-image",
+    "credits": 10.0
+   }
+  },
+  {
+   "module": "concept-art",
+   "asset": null,
+   "status": "warn",
+   "summary": {
+    "zh": "image-to-image 直接把概念图的 task_id 当输入，抽出 4 张道具参考图，风格一致。期间被并发限制（429 / code 2000）拒绝 7 次，没有扣费，改成排队提交。",
+    "en": "image-to-image took the concept task_id directly as input and extracted 4 matching prop references. The concurrency limit (429 / code 2000) rejected 7 submissions — nothing was charged — so they were queued."
+   },
+   "artifacts": [
+    {
+     "kind": "image",
+     "path": "assets/generated/tripo-images/prop-printer-ref-v1/image.png",
+     "label": {
+      "zh": "Tripo 打印机",
+      "en": "Tripo printer"
+     }
+    },
+    {
+     "kind": "image",
+     "path": "assets/generated/tripo-images/prop-workbench-ref-v1/image.png",
+     "label": {
+      "zh": "Blender 工作台",
+      "en": "Blender workbench"
+     }
+    },
+    {
+     "kind": "image",
+     "path": "assets/generated/tripo-images/prop-critic-ref-v1/image.png",
+     "label": {
+      "zh": "四机位评审台",
+      "en": "Four-camera critic rig"
+     }
+    },
+    {
+     "kind": "image",
+     "path": "assets/generated/tripo-images/prop-shelf-ref-v1/image.png",
+     "label": {
+      "zh": "资产库货架",
+      "en": "Library shelf"
+     }
+    }
+   ],
+   "metrics": {
+    "model": "chat_image_2.5_flare",
+    "images": 4,
+    "rejected_429": 7,
+    "credits": 40.0
+   },
+   "cost": {
+    "kind": "tripo-image",
+    "credits": 40.0
+   }
+  },
+  {
+   "module": "tripo-generate",
+   "asset": "workshop-printer",
+   "status": "ok",
+   "summary": {
+    "zh": "参考图上传后用 v3.1 图生 3D，带 PBR 贴图、face_limit 10000、导出 UV。",
+    "en": "Reference uploaded, then v3.1 image-to-3D with PBR textures, face_limit 10000 and UVs."
+   },
+   "artifacts": [
+    {
+     "kind": "model",
+     "path": "assets/generated/models/tripo-b94758708e1b837a724f2c18/model.glb",
+     "label": {
+      "zh": "Tripo 原始模型",
+      "en": "Raw Tripo model"
+     }
+    }
+   ],
+   "metrics": {
+    "model": "v3.1-20260211",
+    "seconds": 226.0,
+    "credits": 30.0
+   },
+   "cost": {
+    "kind": "tripo-model",
+    "credits": 30.0
+   }
+  },
+  {
+   "module": "structure-qa",
+   "asset": "workshop-printer",
+   "status": "ok",
+   "summary": {
+    "zh": "Grok 的 inspect_asset.py 只读检查：结果 pass，警告 0 条。",
+    "en": "Grok’s read-only inspect_asset.py: pass, 0 warning(s)."
+   },
+   "artifacts": [
+    {
+     "kind": "json",
+     "path": "runs/2026-10-15-001/qa/workshop-printer.json",
+     "label": {
+      "zh": "QA 报告",
+      "en": "QA report"
+     }
+    }
+   ],
+   "metrics": {
+    "meshes": 1,
+    "materials": 1,
+    "textures": 3,
+    "animations": 0,
+    "images": 3,
+    "nodes": 1,
+    "uv_sets": 1,
+    "not_checked": 8
+   }
+  },
+  {
+   "module": "tripo-generate",
+   "asset": "workshop-workbench",
+   "status": "ok",
+   "summary": {
+    "zh": "参考图上传后用 v3.1 图生 3D，带 PBR 贴图、face_limit 10000、导出 UV。",
+    "en": "Reference uploaded, then v3.1 image-to-3D with PBR textures, face_limit 10000 and UVs."
+   },
+   "artifacts": [
+    {
+     "kind": "model",
+     "path": "assets/generated/models/tripo-80e8215fd4d9c49769548413/model.glb",
+     "label": {
+      "zh": "Tripo 原始模型",
+      "en": "Raw Tripo model"
+     }
+    }
+   ],
+   "metrics": {
+    "model": "v3.1-20260211",
+    "seconds": 216.5,
+    "credits": 30.0
+   },
+   "cost": {
+    "kind": "tripo-model",
+    "credits": 30.0
+   }
+  },
+  {
+   "module": "structure-qa",
+   "asset": "workshop-workbench",
+   "status": "ok",
+   "summary": {
+    "zh": "Grok 的 inspect_asset.py 只读检查：结果 pass，警告 0 条。",
+    "en": "Grok’s read-only inspect_asset.py: pass, 0 warning(s)."
+   },
+   "artifacts": [
+    {
+     "kind": "json",
+     "path": "runs/2026-10-15-001/qa/workshop-workbench.json",
+     "label": {
+      "zh": "QA 报告",
+      "en": "QA report"
+     }
+    }
+   ],
+   "metrics": {
+    "meshes": 1,
+    "materials": 1,
+    "textures": 3,
+    "animations": 0,
+    "images": 3,
+    "nodes": 1,
+    "uv_sets": 1,
+    "not_checked": 8
+   }
+  },
+  {
+   "module": "tripo-generate",
+   "asset": "workshop-critic",
+   "status": "ok",
+   "summary": {
+    "zh": "参考图上传后用 v3.1 图生 3D，带 PBR 贴图、face_limit 10000、导出 UV。",
+    "en": "Reference uploaded, then v3.1 image-to-3D with PBR textures, face_limit 10000 and UVs."
+   },
+   "artifacts": [
+    {
+     "kind": "model",
+     "path": "assets/generated/models/tripo-9d65593a59b81cf1ec0c998a/model.glb",
+     "label": {
+      "zh": "Tripo 原始模型",
+      "en": "Raw Tripo model"
+     }
+    }
+   ],
+   "metrics": {
+    "model": "v3.1-20260211",
+    "seconds": 193.4,
+    "credits": 30.0
+   },
+   "cost": {
+    "kind": "tripo-model",
+    "credits": 30.0
+   }
+  },
+  {
+   "module": "structure-qa",
+   "asset": "workshop-critic",
+   "status": "ok",
+   "summary": {
+    "zh": "Grok 的 inspect_asset.py 只读检查：结果 pass，警告 0 条。",
+    "en": "Grok’s read-only inspect_asset.py: pass, 0 warning(s)."
+   },
+   "artifacts": [
+    {
+     "kind": "json",
+     "path": "runs/2026-10-15-001/qa/workshop-critic.json",
+     "label": {
+      "zh": "QA 报告",
+      "en": "QA report"
+     }
+    }
+   ],
+   "metrics": {
+    "meshes": 1,
+    "materials": 1,
+    "textures": 3,
+    "animations": 0,
+    "images": 3,
+    "nodes": 1,
+    "uv_sets": 1,
+    "not_checked": 8
+   }
+  },
+  {
+   "module": "tripo-generate",
+   "asset": "workshop-shelf",
+   "status": "ok",
+   "summary": {
+    "zh": "参考图上传后用 v3.1 图生 3D，带 PBR 贴图、face_limit 10000、导出 UV。",
+    "en": "Reference uploaded, then v3.1 image-to-3D with PBR textures, face_limit 10000 and UVs."
+   },
+   "artifacts": [
+    {
+     "kind": "model",
+     "path": "assets/generated/models/tripo-b6985ca8e1b6c0f64fc46115/model.glb",
+     "label": {
+      "zh": "Tripo 原始模型",
+      "en": "Raw Tripo model"
+     }
+    }
+   ],
+   "metrics": {
+    "model": "v3.1-20260211",
+    "seconds": 190.5,
+    "credits": 30.0
+   },
+   "cost": {
+    "kind": "tripo-model",
+    "credits": 30.0
+   }
+  },
+  {
+   "module": "structure-qa",
+   "asset": "workshop-shelf",
+   "status": "ok",
+   "summary": {
+    "zh": "Grok 的 inspect_asset.py 只读检查：结果 pass，警告 0 条。",
+    "en": "Grok’s read-only inspect_asset.py: pass, 0 warning(s)."
+   },
+   "artifacts": [
+    {
+     "kind": "json",
+     "path": "runs/2026-10-15-001/qa/workshop-shelf.json",
+     "label": {
+      "zh": "QA 报告",
+      "en": "QA report"
+     }
+    }
+   ],
+   "metrics": {
+    "meshes": 1,
+    "materials": 1,
+    "textures": 3,
+    "animations": 0,
+    "images": 3,
+    "nodes": 1,
+    "uv_sets": 1,
+    "not_checked": 8
+   }
+  },
+  {
+   "module": "blender-cleanup",
+   "asset": null,
+   "status": "ok",
+   "summary": {
+    "zh": "无界面 Blender：按平面图统一米制尺寸、轴心放到底部、程序化生成桌面和传送带，组装后导出 glb 并重新导入验证。教训：第一次自动“统一法线”把每个模型约 30% 的面翻反，渲染出现黑色破片；Tripo 模型不是封闭网格，改为只检查不改写后恢复正常。打印机和货架的正面朝向不对，各转了 -90°。",
+    "en": "Headless Blender: real-metre scale from the floor plan, bottom-centre pivots, procedural table and belts, then export and re-import to verify. Lesson: blindly recalculating normals flipped ~30% of each model’s faces and rendered black patches — Tripo shells are not closed — so it became a check-only step. The printer and shelf faced sideways and were rotated -90°."
+   },
+   "artifacts": [
+    {
+     "kind": "image",
+     "path": "runs/2026-10-15-001/layout.svg",
+     "label": {
+      "zh": "俯视平面图（米）",
+      "en": "Top-down plan (m)"
+     }
+    },
+    {
+     "kind": "image",
+     "path": "runs/2026-10-15-001/blender/round0-normals-bug.jpg",
+     "label": {
+      "zh": "翻车：自动重算法线后的黑色破片",
+      "en": "Failure: black patches after recalculating normals"
+     }
+    },
+    {
+     "kind": "model",
+     "path": "library/workshop-printer/model.glb",
+     "label": {
+      "zh": "Tripo 打印机",
+      "en": "Tripo printer"
+     }
+    },
+    {
+     "kind": "model",
+     "path": "library/workshop-workbench/model.glb",
+     "label": {
+      "zh": "Blender 工作台",
+      "en": "Blender workbench"
+     }
+    },
+    {
+     "kind": "model",
+     "path": "library/workshop-critic/model.glb",
+     "label": {
+      "zh": "四机位评审台",
+      "en": "Four-camera critic rig"
+     }
+    },
+    {
+     "kind": "model",
+     "path": "library/workshop-shelf/model.glb",
+     "label": {
+      "zh": "资产库货架",
+      "en": "Library shelf"
+     }
+    }
+   ],
+   "metrics": {
+    "scene_triangles": 35606,
+    "reimport_triangles": 35606,
+    "reimport_meshes": 38,
+    "seconds": 4.9,
+    "blender": "5.2.0 LTS"
+   }
+  },
+  {
+   "module": "visual-critic",
+   "asset": null,
+   "status": "warn",
+   "summary": {
+    "zh": "第 1 轮：新开的 Claude 子代理对照概念图看四视角渲染，打 6/10，判定退回 Blender 修整。四个道具的造型和摆位基本还原了概念图，物体也都稳稳落在桌面上；但灯光平淡偏冷、缺少紫色发光和暖色主光，传送带只是几块平板，扫描仪的玻璃罩被烘成了不透明灰色半壳，距离可交付还差一轮场景修整和一次扫描仪重生成。",
+    "en": "Round 1: a fresh Claude sub-agent compared the four views with the concept, scored 6/10 and routed it back to Blender. Prop silhouettes and layout broadly match the concept and everything sits on the table, but the lighting is flat and cool with no purple glow or warm key, the belts are plain slabs, and the scanner's glass dome baked into an opaque grey half-shell; it needs a Blender lighting/material pass plus one scanner regeneration before it can ship."
+   },
+   "artifacts": [
+    {
+     "kind": "image",
+     "path": "runs/2026-10-15-001/blender/round1/overview.jpg",
+     "label": {
+      "zh": "第 1 轮总览",
+      "en": "Round 1 overview"
+     }
+    }
+   ],
+   "metrics": {
+    "score": "6/10",
+    "verdict": "fix-blender",
+    "flaw_1": "[blender-cleanup] Lighting/mood miss: the concept has a warm top-left key, dark vignette, purple neon glow f",
+    "flaw_2": "[blender-cleanup] Table palette wrong: the concept is a saturated orange-brown walnut with visible grain and",
+    "flaw_3": "[blender-cleanup] Belts don't read as conveyors: they are flat dark slabs on two legs with no belt surface, ",
+    "flaw_4": "[tripo-generate] Scanner mesh is wrong: the concept is a transparent glass cylinder with a purple ring and ",
+    "flaw_5": "[blender-cleanup] Texture/surface quality: in the closeup the printer texture is smeary and blotchy, with a ",
+    "flaw_6": "[blender-cleanup] Wireframe: dense, chaotic triangle soup typical of Tripo, with several long needle spikes ",
+    "flaw_7": "[blender-cleanup] Composition/scale: the overview leaves large empty space top and left instead of filling t"
+   }
+  },
+  {
+   "module": "visual-critic",
+   "asset": null,
+   "status": "warn",
+   "summary": {
+    "zh": "第 2 轮：Blender 修整后重新评审，6 → 6.5/10。这一轮修整有实际进步：背景压暗、桌面变成橙棕色、传送带合成一整条并带橙色方块、镜头更紧、货架缩小。但仍不能交付。核心道具扫描仪还是不透明的灰色半壳，龙坐在壳外，紫色光环也没有真正发光。新的传送带是一条斜放在所有道具前面的长轨，没有把打印机、工作台、扫描仪、货架串起来，在低角度镜头里像一道栅栏挡住了道具。线框里仍有尖刺边。下一步应先重生成扫描仪，再做一轮 Blender 修整。",
+    "en": "Round 2 after one Blender pass: 6 → 6.5/10. Real progress this round: the world is darker, the table is orange-brown, the belt is one continuous line with orange cubes, the cameras are tighter and the shelf is smaller. It still can't ship. The scanner, the hero prop, is still an opaque grey half-shell with the dragon outside it, and its purple ring still doesn't really glow. The new belt is one long diagonal rail running in front of every prop instead of linking printer, bench, scanner and shelf, and in the low angle it reads as a fence blocking the props. Needle spikes remain in the wireframe. Regenerate the scanner first, then do one more Blender pass."
+   },
+   "artifacts": [
+    {
+     "kind": "image",
+     "path": "runs/2026-10-15-001/blender/overview.png",
+     "label": {
+      "zh": "overview",
+      "en": "overview"
+     }
+    },
+    {
+     "kind": "image",
+     "path": "runs/2026-10-15-001/blender/closeup.png",
+     "label": {
+      "zh": "closeup",
+      "en": "closeup"
+     }
+    },
+    {
+     "kind": "image",
+     "path": "runs/2026-10-15-001/blender/low_angle.png",
+     "label": {
+      "zh": "low angle",
+      "en": "low angle"
+     }
+    },
+    {
+     "kind": "image",
+     "path": "runs/2026-10-15-001/blender/wireframe.png",
+     "label": {
+      "zh": "wireframe",
+      "en": "wireframe"
+     }
+    }
+   ],
+   "metrics": {
+    "score": "6.5/10",
+    "verdict": "regenerate",
+    "remaining_1": "[tripo-generate] Scanner still wrong: an opaque grey back half-shell instead of a clear glass cylinder, the",
+    "remaining_2": "[blender-cleanup] Belt routing is wrong: it is one long diagonal rail in front of all props instead of segme",
+    "remaining_3": "[blender-cleanup] Glow still missing: the scanner ring and purple base band are pale lavender with no emissi",
+    "remaining_4": "[blender-cleanup] Wireframe still not clean: long needle spikes are still visible at the printer top, the pr",
+    "remaining_5": "[blender-cleanup] Surfaces and noise: a blown-out white specular hotspot sits on the table's right side by t"
+   }
+  },
+  {
+   "module": "asset-library",
+   "asset": null,
+   "status": "ok",
+   "summary": {
+    "zh": "4 个清理后的道具和组装好的场景写入资产库，每个带 meta.json。",
+    "en": "Four cleaned props and the assembled scene stored in the library, each with meta.json."
+   },
+   "artifacts": [
+    {
+     "kind": "model",
+     "path": "library/workshop-scene/scene.glb",
+     "label": {
+      "zh": "组装好的场景",
+      "en": "Assembled scene"
+     }
+    }
+   ]
+  },
+  {
+   "module": "web-threejs",
+   "asset": null,
+   "status": "ok",
+   "summary": {
+    "zh": "这个网站读取运行记录和资产库，在浏览器里回放整个过程。",
+    "en": "This site reads the run record and library and replays the whole process in the browser."
+   }
+  }
+ ]
+}

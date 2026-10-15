@@ -35,6 +35,6 @@
   "station": {
     "color": "#7d8698",
     "icon": "shelf",
-    "model": null
+    "model": "library/workshop-shelf/model.glb"
   }
 }

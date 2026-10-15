@@ -1,0 +1,39 @@
+{
+  "operation_id": "prop-critic-ref-v1",
+  "request": {
+    "kind": "image",
+    "body": {
+      "model": "chat_image_2.5_flare",
+      "size": "1024x1024",
+      "quality": "medium",
+      "background": "opaque",
+      "output_format": "png",
+      "prompt": "From this image, isolate ONLY the round white display pedestal with the transparent glass cylinder, the purple light ring, the small orange dragon figure on it and the four small cameras on tripods around it, as a single complete object, centered, seen in 3/4 view from slightly above, keeping exactly the same design, colors, proportions and materials as in the source image. Plain light-grey seamless studio background, soft even lighting, gentle contact shadow only. Remove the conveyor belt, the wooden table and every other object. Show the whole object with margin around it. --no text, cropping, extra objects"
+    },
+    "input_file": null,
+    "input_task": "0d626fb5-4286-4210-8084-3077c1a5b9d6"
+  },
+  "request_sha256": "40fd820720561452a2aa152357e4b905120432b5fbd2a5689100da1b5ce05fe6",
+  "status": "downloaded",
+  "submitted_at": "2026-10-15T07:44:25.414908+00:00",
+  "rejections": [
+    {
+      "submitted_at": "2026-10-15T07:35:16.946161+00:00",
+      "http_status": 429,
+      "code": 2000
+    },
+    {
+      "submitted_at": "2026-10-15T07:40:13.188305+00:00",
+      "http_status": 429,
+      "code": 2000
+    }
+  ],
+  "task_id": "83f0db8f-154a-4280-a6e1-e11b26767d02",
+  "remote_status": "success",
+  "progress": 100,
+  "image": "assets/generated/tripo-images/prop-critic-ref-v1/image.png",
+  "sha256": "cbc3c2518c8965f384548cbae3cef402423c0d80e773c49d111484049cc616db",
+  "credits_consumed": 10.0,
+  "created_at": "2026-10-15T07:44:28.243826Z",
+  "completed_at": "2026-10-15T07:45:04.612782Z"
+}

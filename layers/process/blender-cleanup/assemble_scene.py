@@ -60,6 +60,7 @@ for spec in layout['props']:
     meshes = [o for o in imported if o.type == 'MESH']
     raw_tris = tris(meshes)
     flipped = 0
+    removed_loose = 0
     for o in meshes:  # dry run only: Tripo shells are not closed, so recalculating flips good faces
 
         bm = bmesh.new()
@@ -67,6 +68,14 @@ for spec in layout['props']:
         old = [f.normal.copy() for f in bm.faces]
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
         flipped += sum(1 for f, n in zip(bm.faces, old) if f.normal.dot(n) < 0)
+        bm.free()
+        bm = bmesh.new()  # remove spikes: loose verts/edges and degenerate faces
+        bm.from_mesh(o.data)
+        loose = [v for v in bm.verts if not v.link_faces]
+        bmesh.ops.delete(bm, geom=loose, context='VERTS')
+        bmesh.ops.dissolve_degenerate(bm, dist=1e-5, edges=bm.edges[:])
+        removed_loose += len(loose)
+        bm.to_mesh(o.data)
         bm.free()
     decimated = False
     if raw_tris > spec.get('max_tris', 40000):
@@ -108,7 +117,7 @@ for spec in layout['props']:
     props[spec['id']] = {'root': root, 'lo': lo2, 'hi': hi2}
     metrics['props'].append({
         'id': spec['id'], 'source': spec['source'], 'raw_triangles': raw_tris, 'triangles': tris(meshes),
-        'decimated': decimated, 'normals_recalc_would_flip': flipped, 'normals_recalc_applied': False, 'meshes': len(meshes),
+        'decimated': decimated, 'normals_recalc_would_flip': flipped, 'normals_recalc_applied': False, 'removed_loose_verts': removed_loose, 'meshes': len(meshes),
         'materials': sorted(materials), 'scale_factor': round(s, 5), 'dimensions_m': dims,
         'bottom_z_m': round(lo2.z, 5), 'library_model': str((lib_dir / 'model.glb').relative_to(ROOT)),
     })
@@ -128,7 +137,7 @@ def material(name, color, rough=0.5, metal=0.0, emit=None, strength=0.0):
 
 
 def wood():
-    m = material('wood', (0.45, 0.24, 0.11), rough=0.45)
+    m = material('wood', (0.30, 0.12, 0.04), rough=0.35)
     nt = m.node_tree
     noise = nt.nodes.new('ShaderNodeTexNoise')
     noise.inputs['Scale'].default_value = 6
@@ -137,8 +146,8 @@ def wood():
     mapping.inputs['Scale'].default_value = (1, 18, 1)  # stretched grain
     coord = nt.nodes.new('ShaderNodeTexCoord')
     ramp = nt.nodes.new('ShaderNodeValToRGB')
-    ramp.color_ramp.elements[0].color = (0.30, 0.14, 0.06, 1)
-    ramp.color_ramp.elements[1].color = (0.58, 0.32, 0.15, 1)
+    ramp.color_ramp.elements[0].color = (0.16, 0.06, 0.02, 1)
+    ramp.color_ramp.elements[1].color = (0.42, 0.17, 0.05, 1)
     nt.links.new(coord.outputs['Object'], mapping.inputs['Vector'])
     nt.links.new(mapping.outputs['Vector'], noise.inputs['Vector'])
     nt.links.new(noise.outputs['Fac'], ramp.inputs['Fac'])
@@ -164,26 +173,29 @@ t = layout['table']
 box('table', (0, 0, -t['thickness_m'] / 2), (t['width_m'], t['depth_m'], t['thickness_m']), wood(), bevel=0.008)
 belt_mat = material('belt', (0.05, 0.055, 0.065), rough=0.7)
 leg_mat = material('leg', (0.12, 0.12, 0.14), rough=0.4, metal=0.6)
-cube_mat = material('glow', (1.0, 0.45, 0.1), emit=(1.0, 0.5, 0.12), strength=6)
 order = [p['id'] for p in sorted(layout['props'], key=lambda p: p['x'])]
 bh = layout['belt']['height_m']
-for a, b in zip(order, order[1:]):
-    x0, x1 = props[a]['hi'].x + 0.005, props[b]['lo'].x - 0.005
-    if x1 - x0 < 0.02:
-        continue
-    cx = (x0 + x1) / 2
-    box(f'belt_{a}_{b}', (cx, 0, bh), (x1 - x0, layout['belt']['width_m'], 0.012), belt_mat, bevel=0.003)
-    for lx in (x0 + 0.01, x1 - 0.01):
-        box(f'leg_{a}_{b}_{lx:.2f}', (lx, 0, bh / 2), (0.008, layout['belt']['width_m'] * 0.8, bh), leg_mat)
-    n = max(1, int((x1 - x0) / 0.05))
-    for i in range(n):
-        box(f'cube_{a}_{i}', (x0 + (i + 0.5) * (x1 - x0) / n, 0, bh + 0.013), (0.014, 0.014, 0.014), cube_mat)
+bw = layout['belt']['width_m']
+rail_mat = material('rail', (0.35, 0.36, 0.4), rough=0.3, metal=0.8)
+cube_mat = material('glow', (1.0, 0.3, 0.02), emit=(1.0, 0.22, 0.0), strength=1.6)
+x0, x1 = props[order[0]]['hi'].x - 0.02, props[order[-1]]['lo'].x + 0.02
+cx, L = (x0 + x1) / 2, x1 - x0
+box('belt', (cx, -0.16, bh), (L, bw, 0.01), belt_mat, bevel=0.002)
+for side in (-1, 1):
+    box(f'rail_{side}', (cx, -0.16 + side * (bw / 2 + 0.004), bh + 0.004), (L, 0.006, 0.018), rail_mat, bevel=0.001)
+for i in range(int(L / 0.12) + 1):
+    lx = x0 + i * L / int(L / 0.12)
+    box(f'leg_{i}', (lx, -0.16, bh / 2), (0.01, bw * 0.7, bh), leg_mat)
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.006, depth=bw, location=(lx, -0.16, bh - 0.002), rotation=(math.pi / 2, 0, 0))
+    bpy.context.active_object.data.materials.append(rail_mat)
+for i in range(14):
+    box(f'cube_{i}', (x0 + (i + 0.5) * L / 14, -0.16, bh + 0.013), (0.014, 0.014, 0.014), cube_mat)
 
 # ---------- world, lights ----------
 world = bpy.data.worlds.new('world')
 scene.world = world
 world.use_nodes = True
-world.node_tree.nodes['Background'].inputs['Color'].default_value = (0.012, 0.013, 0.016, 1)
+world.node_tree.nodes['Background'].inputs['Color'].default_value = (0.006, 0.006, 0.008, 1)
 world.node_tree.nodes['Background'].inputs['Strength'].default_value = 1.0
 
 
@@ -200,8 +212,9 @@ def light(name, kind, loc, energy, color, size=0.5, target=(0, 0, 0.1)):
     return o
 
 
-light('key', 'AREA', (-0.9, -1.0, 1.3), 120, (1.0, 0.86, 0.7), size=0.8)
-light('fill', 'AREA', (1.2, -0.8, 0.6), 30, (0.75, 0.82, 1.0), size=1.0)
+light('key', 'AREA', (-0.9, -0.8, 1.2), 160, (1.0, 0.78, 0.55), size=0.6)
+light('fill', 'AREA', (1.2, -0.8, 0.6), 8, (0.75, 0.82, 1.0), size=1.0)
+light('neon', 'POINT', (0.18, 0.0, 0.3), 6, (0.69, 0.36, 0.78))
 light('rim', 'AREA', (0.2, 1.2, 0.9), 70, (1.0, 0.9, 0.8), size=0.6)
 
 # ---------- cameras & render ----------
@@ -214,7 +227,7 @@ for engine in ('BLENDER_EEVEE', 'BLENDER_EEVEE_NEXT', 'CYCLES'):
 if scene.render.engine == 'CYCLES':
     scene.cycles.samples = 48
 else:
-    scene.eevee.taa_render_samples = 48
+    scene.eevee.taa_render_samples = 96
 scene.render.resolution_x, scene.render.resolution_y = 1600, 1000
 scene.view_settings.view_transform = 'AgX'
 scene.render.film_transparent = False

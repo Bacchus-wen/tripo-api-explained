@@ -12,8 +12,8 @@
     "en": "Renders overview, close-up, low-angle and wireframe views; an independent critic lists at least three concrete flaws and scores the scene, routing failures back to the right step."
   },
   "tools": [
-    "Four-view renders",
-    "Critic sub-agent"
+    "Blender four-view renders",
+    "Claude critic sub-agent"
   ],
   "inputs": [
     {
@@ -36,6 +36,15 @@
   "station": {
     "color": "#b05cc8",
     "icon": "camera",
-    "model": null
-  }
+    "model": "library/workshop-critic/model.glb"
+  },
+  "roles": [
+    {
+      "who": "Claude",
+      "what": {
+        "zh": "新开的独立子代理看四视角图打分、列问题、决定通过或退回",
+        "en": "A fresh, independent sub-agent scores the four views, lists flaws and decides pass or route-back"
+      }
+    }
+  ]
 }

@@ -1,0 +1,26 @@
+{
+ "id": "workshop-workbench",
+ "name": {
+  "zh": "Blender 工作台",
+  "en": "Blender workbench"
+ },
+ "order_id": "2026-10-15-001",
+ "source": "tripo image-to-model v3.1-20260211",
+ "raw_model": "assets/generated/models/tripo-80e8215fd4d9c49769548413/model.glb",
+ "model": "library/workshop-workbench/model.glb",
+ "units": "metres",
+ "pivot": "bottom-centre",
+ "dimensions_m": [
+  0.1864,
+  0.1946,
+  0.22
+ ],
+ "triangles": 8326,
+ "materials": [
+  "tripo_material_eae20a70-8cff-41f6-88eb-4dc6f93b5293"
+ ],
+ "normals_recalc_would_flip": 1367,
+ "structure_qa": "pass",
+ "critic_score": 6.5,
+ "license": "Tripo generated asset; check Tripo terms before commercial use"
+}

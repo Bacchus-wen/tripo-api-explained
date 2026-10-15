@@ -1,0 +1,49 @@
+{
+  "operation_id": "prop-workbench-ref-v1",
+  "request": {
+    "kind": "image",
+    "body": {
+      "model": "chat_image_2.5_flare",
+      "size": "1024x1024",
+      "quality": "medium",
+      "background": "opaque",
+      "output_format": "png",
+      "prompt": "From this image, isolate ONLY the orange craftsman workbench with its drawers, vise, desk lamp, tools, tray, the small grey dragon figure on top and the two storage boxes underneath, as a single complete object, centered, seen in 3/4 view from slightly above, keeping exactly the same design, colors, proportions and materials as in the source image. Plain light-grey seamless studio background, soft even lighting, gentle contact shadow only. Remove the conveyor belt, the wooden table and every other object. Show the whole object with margin around it. --no text, cropping, extra objects"
+    },
+    "input_file": null,
+    "input_task": "0d626fb5-4286-4210-8084-3077c1a5b9d6"
+  },
+  "request_sha256": "e8c22354f54514fbc65b626bd1f7f02d66a4ab48b593b3b2b07aca970572df4f",
+  "status": "downloaded",
+  "submitted_at": "2026-10-15T07:45:16.026572+00:00",
+  "rejections": [
+    {
+      "submitted_at": "2026-10-15T07:35:14.656232+00:00",
+      "http_status": 429,
+      "code": 2000
+    },
+    {
+      "submitted_at": "2026-10-15T07:40:10.613882+00:00",
+      "http_status": 429,
+      "code": 2000
+    },
+    {
+      "submitted_at": "2026-10-15T07:44:22.640718+00:00",
+      "http_status": 429,
+      "code": 2000
+    },
+    {
+      "submitted_at": "2026-10-15T07:44:47.480032+00:00",
+      "http_status": 429,
+      "code": 2000
+    }
+  ],
+  "task_id": "46a0e08c-0fa3-4e0b-9c60-52178d39977a",
+  "remote_status": "success",
+  "progress": 100,
+  "image": "assets/generated/tripo-images/prop-workbench-ref-v1/image.png",
+  "sha256": "df60e4366f8aaf43cec96e9f36c3a8efb450c01917407c3fa8ee7d239b3831ae",
+  "credits_consumed": 10.0,
+  "created_at": "2026-10-15T07:45:18.925228Z",
+  "completed_at": "2026-10-15T07:45:46.285823Z"
+}

@@ -1,0 +1,18 @@
+{
+  "status": "unknown",
+  "started_at": "2026-10-15T07:23:21.071357+00:00",
+  "provider": "https://lumina.tripo3d.com",
+  "endpoint": "/v1/images/generations",
+  "requested": {
+    "model": "gpt-image-2.5-sunburst",
+    "prompt": "Stylized 3D miniature diorama of an \"AI 3D asset production workshop\" sitting on a square warm-wood tabletop, seen from a 3/4 isometric camera angle, against a dark charcoal studio background. Soft warm key light from upper left, gentle rim light, soft contact shadows, slight tilt-shift depth of field. Clean game-art style, smooth bevelled shapes, matte painted materials with small metal details.\n\nOn the tabletop, four distinct machines are connected in order by a short dark-grey conveyor belt carrying a few tiny glowing orange cubes:\n1. A teal (#3fa7a0) boxy 3D-printer-like generator machine with a glass chamber in which a small orange 3D model is forming from light.\n2. A low orange (#e07a3f) craftsman workbench with a vise, small tools, and a small grey 3D model being cleaned up.\n3. A round white display pedestal holding one small orange model, surrounded by four tiny cameras on tripods pointing at it from four angles (front 3/4, close, low angle, top), with a purple (#b05cc8) accent light ring.\n4. A tall grey metal storage shelf with small boxes and neatly arranged finished miniature models.\n\nReadable silhouettes, each machine clearly separated with breathing room, cohesive palette (teal, orange, purple, grey on warm wood), no text, no logos, no people.",
+    "size": "1024x1024",
+    "n": 1
+  },
+  "source_image": null,
+  "source_sha256": null,
+  "automatic_retries": 0,
+  "finished_at": "2026-10-15T07:23:21.581441+00:00",
+  "error": "Request did not produce a usable response (URLError). No automatic retry was made.",
+  "elapsed_seconds": 0.51
+}

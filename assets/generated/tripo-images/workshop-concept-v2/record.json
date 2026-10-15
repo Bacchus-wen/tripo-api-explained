@@ -1,0 +1,26 @@
+{
+  "operation_id": "workshop-concept-v2",
+  "request": {
+    "kind": "text",
+    "body": {
+      "model": "chat_image_2.5_flare",
+      "size": "1536x1024",
+      "quality": "medium",
+      "output_format": "png",
+      "prompt": "Stylized 3D miniature diorama of an \"AI 3D asset production workshop\" on a rectangular warm-wood tabletop, 3/4 isometric camera, dark charcoal studio background. Soft warm key light from upper left, gentle rim light, soft contact shadows, slight tilt-shift depth of field. Clean game-art style, smooth bevelled shapes, matte painted materials with small metal details.\n\nA short dark-grey conveyor belt carrying tiny glowing orange cubes runs left to right, connecting four clearly separated machines in order:\n1. A teal (#3fa7a0) boxy 3D-printer-like generator machine with a glass chamber where a small orange 3D model is forming from light.\n2. A low orange (#e07a3f) craftsman workbench with a vise, small tools and a small grey 3D model being cleaned up.\n3. A round white display pedestal holding a small orange model, surrounded by four tiny cameras on tripods pointing at it from different angles, with a purple (#b05cc8) light ring.\n4. A tall grey metal storage shelf with small boxes and neatly arranged finished miniature models.\n\nReadable silhouettes, generous spacing between machines, cohesive palette of teal, orange, purple and grey on warm wood. --no text, logos, people, clutter"
+    },
+    "input_file": null,
+    "input_task": null
+  },
+  "request_sha256": "77d854e0cbddbd34d35dcf28949b27797ef9dee93a07863a44c0ec0500c6810b",
+  "status": "downloaded",
+  "submitted_at": "2026-10-15T07:32:00.120169+00:00",
+  "task_id": "0d626fb5-4286-4210-8084-3077c1a5b9d6",
+  "remote_status": "success",
+  "progress": 100,
+  "image": "assets/generated/tripo-images/workshop-concept-v2/image.png",
+  "sha256": "ed46851694ee0baef82d91b70d61afcc78ec8802f49ce204b23f8b9803ee7361",
+  "credits_consumed": 10.0,
+  "created_at": "2026-10-15T07:32:02.902549Z",
+  "completed_at": "2026-10-15T07:32:27.487103Z"
+}

@@ -15,7 +15,7 @@ export function createStage(el, { camPos = [2.4, 1.7, 2.8], target = [0, 0.5, 0]
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.domElement.className = 'stage-canvas';
   el.appendChild(renderer.domElement);
 
@@ -56,12 +56,15 @@ export function createStage(el, { camPos = [2.4, 1.7, 2.8], target = [0, 0.5, 0]
   }
 
   const frameFns = new Set();
-  const clock = new THREE.Clock();
+  let last = performance.now();
+  let time = 0;
   let raf = 0;
   const loop = () => {
     raf = requestAnimationFrame(loop);
-    const dt = Math.min(clock.getDelta(), 0.05);
-    const time = clock.elapsedTime;
+    const now = performance.now();
+    const dt = Math.min((now - last) / 1000, 0.05);
+    last = now;
+    time += dt;
     frameFns.forEach((fn) => fn(dt, time));
     controls.update();
     renderer.render(scene, camera);

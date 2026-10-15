@@ -1,0 +1,32 @@
+{
+  "operation_id": "workshop-critic-model-v1",
+  "run_dir": "/Users/wenbin/Desktop/tripo工作流/assets/generated/models/tripo-9d65593a59b81cf1ec0c998a",
+  "source_path": "/Users/wenbin/Desktop/tripo工作流/assets/generated/tripo-images/prop-critic-ref-v1/image.png",
+  "source_sha256": "cbc3c2518c8965f384548cbae3cef402423c0d80e773c49d111484049cc616db",
+  "source_size": 1226202,
+  "source_mime": "image/png",
+  "source_dimensions": [
+    1024,
+    1024
+  ],
+  "model": "v3.1-20260211",
+  "params": {
+    "texture": true,
+    "pbr": true,
+    "face_limit": 10000,
+    "export_uv": true
+  },
+  "request_sha256": "2b7e6890225a9dad8944f898cd29d2cbf296a875ba52ae198d58d5d8e413ee76",
+  "status": "downloaded_pending_review",
+  "usable": false,
+  "created_at": "2026-10-15T07:45:45.139325+00:00",
+  "updated_at": "2026-10-15T07:49:17.502067+00:00",
+  "source_snapshot": "/Users/wenbin/Desktop/tripo工作流/assets/generated/models/tripo-9d65593a59b81cf1ec0c998a/source.png",
+  "file_token": "file_377cc8ff-35a6-4647-a789-08cdf878324d",
+  "task_id": "9d774b22-40a7-41f7-9d16-40b99e58cc27",
+  "remote_status": "success",
+  "progress": 100,
+  "model_path": "/Users/wenbin/Desktop/tripo工作流/assets/generated/models/tripo-9d65593a59b81cf1ec0c998a/model.glb",
+  "model_sha256": "4220be67dddf0dd31b5cb721f17e542a43d94513d00ac298f0d96683b9bfa7e6",
+  "model_size": 2761128
+}

@@ -1,0 +1,18 @@
+{
+ "id": "workshop-scene",
+ "order_id": "2026-10-15-001",
+ "model": "library/workshop-scene/scene.glb",
+ "parts": [
+  "workshop-printer",
+  "workshop-workbench",
+  "workshop-critic",
+  "workshop-shelf"
+ ],
+ "procedural": [
+  "table",
+  "belts",
+  "glow cubes"
+ ],
+ "triangles": 35606,
+ "critic_score": 6.5
+}

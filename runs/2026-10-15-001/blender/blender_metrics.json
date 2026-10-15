@@ -1,0 +1,108 @@
+{
+  "blender": "5.2.0 LTS",
+  "props": [
+    {
+      "id": "workshop-printer",
+      "source": "assets/generated/models/tripo-b94758708e1b837a724f2c18/model.glb",
+      "raw_triangles": 8062,
+      "triangles": 8062,
+      "decimated": false,
+      "normals_recalc_would_flip": 2858,
+      "normals_recalc_applied": false,
+      "removed_loose_verts": 0,
+      "meshes": 1,
+      "materials": [
+        "tripo_material_63661135-b906-42bb-bd63-a3e2cd1d9b14"
+      ],
+      "scale_factor": 0.28,
+      "dimensions_m": [
+        0.2596,
+        0.2053,
+        0.28
+      ],
+      "bottom_z_m": 0.0,
+      "library_model": "library/workshop-printer/model.glb"
+    },
+    {
+      "id": "workshop-workbench",
+      "source": "assets/generated/models/tripo-80e8215fd4d9c49769548413/model.glb",
+      "raw_triangles": 8326,
+      "triangles": 8326,
+      "decimated": false,
+      "normals_recalc_would_flip": 1367,
+      "normals_recalc_applied": false,
+      "removed_loose_verts": 0,
+      "meshes": 1,
+      "materials": [
+        "tripo_material_eae20a70-8cff-41f6-88eb-4dc6f93b5293"
+      ],
+      "scale_factor": 0.22,
+      "dimensions_m": [
+        0.1864,
+        0.1946,
+        0.22
+      ],
+      "bottom_z_m": 0.0,
+      "library_model": "library/workshop-workbench/model.glb"
+    },
+    {
+      "id": "workshop-critic",
+      "source": "assets/generated/models/tripo-9d65593a59b81cf1ec0c998a/model.glb",
+      "raw_triangles": 9545,
+      "triangles": 9545,
+      "decimated": false,
+      "normals_recalc_would_flip": 2468,
+      "normals_recalc_applied": false,
+      "removed_loose_verts": 0,
+      "meshes": 1,
+      "materials": [
+        "tripo_material_9d774b22-40a7-41f7-9d16-40b99e58cc27"
+      ],
+      "scale_factor": 0.29706,
+      "dimensions_m": [
+        0.2524,
+        0.2971,
+        0.26
+      ],
+      "bottom_z_m": 0.0,
+      "library_model": "library/workshop-critic/model.glb"
+    },
+    {
+      "id": "workshop-shelf",
+      "source": "assets/generated/models/tripo-b6985ca8e1b6c0f64fc46115/model.glb",
+      "raw_triangles": 8369,
+      "triangles": 8369,
+      "decimated": false,
+      "normals_recalc_would_flip": 2787,
+      "normals_recalc_applied": false,
+      "removed_loose_verts": 0,
+      "meshes": 1,
+      "materials": [
+        "tripo_material_1089f756-c000-4eee-a0b0-abaf3d00ff3f"
+      ],
+      "scale_factor": 0.34,
+      "dimensions_m": [
+        0.2424,
+        0.1149,
+        0.34
+      ],
+      "bottom_z_m": 0.0,
+      "library_model": "library/workshop-shelf/model.glb"
+    }
+  ],
+  "checks": {
+    "scene_triangles": 35606,
+    "reimport_meshes": 38,
+    "reimport_triangles": 35606,
+    "reimport_images": 12,
+    "blend_saved": true
+  },
+  "renders": [
+    "runs/2026-10-15-001/blender/overview.png",
+    "runs/2026-10-15-001/blender/closeup.png",
+    "runs/2026-10-15-001/blender/low_angle.png",
+    "runs/2026-10-15-001/blender/wireframe.png"
+  ],
+  "scene_model": "library/workshop-scene/scene.glb",
+  "seconds": 4.9
+}

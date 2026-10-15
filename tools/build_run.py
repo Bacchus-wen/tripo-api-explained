@@ -99,20 +99,30 @@ for p in NAMES:
 if blender['props']:
     c = blender['checks']
     steps.append({'module': 'blender-cleanup', 'asset': None, 'status': 'ok' if c.get('blend_saved') and c.get('reimport_meshes') else 'warn',
-                  'summary': B('无界面 Blender：按平面图统一米制尺寸、轴心放到底部、统一法线、程序化生成桌面和传送带，组装后导出 glb 并重新导入验证。',
-                               'Headless Blender: real-metre scale from the floor plan, bottom-centre pivots, consistent normals, procedural table and belts, then export and re-import to verify.'),
-                  'artifacts': [{'kind': 'image', 'path': 'runs/2026-10-15-001/layout.svg', 'label': B('俯视平面图（米）', 'Top-down plan (m)')}]
+                  'summary': B('无界面 Blender：按平面图统一米制尺寸、轴心放到底部、程序化生成桌面和传送带，组装后导出 glb 并重新导入验证。教训：第一次自动“统一法线”把每个模型约 30% 的面翻反，渲染出现黑色破片；Tripo 模型不是封闭网格，改为只检查不改写后恢复正常。打印机和货架的正面朝向不对，各转了 -90°。',
+                               'Headless Blender: real-metre scale from the floor plan, bottom-centre pivots, procedural table and belts, then export and re-import to verify. Lesson: blindly recalculating normals flipped ~30% of each model’s faces and rendered black patches — Tripo shells are not closed — so it became a check-only step. The printer and shelf faced sideways and were rotated -90°.'),
+                  'artifacts': [{'kind': 'image', 'path': 'runs/2026-10-15-001/layout.svg', 'label': B('俯视平面图（米）', 'Top-down plan (m)')},
+                                {'kind': 'image', 'path': 'runs/2026-10-15-001/blender/round0-normals-bug.jpg', 'label': B('翻车：自动重算法线后的黑色破片', 'Failure: black patches after recalculating normals')}]
                   + [{'kind': 'model', 'path': x['library_model'], 'label': NAMES[x['id'].split('-')[1]]} for x in blender['props']],
                   'metrics': {'scene_triangles': c.get('scene_triangles'), 'reimport_triangles': c.get('reimport_triangles'),
                               'reimport_meshes': c.get('reimport_meshes'), 'seconds': blender.get('seconds'), 'blender': blender.get('blender')}})
 
 critic = load(RUN / 'critic.json')
-if critic:
+round1 = load(RUN / 'critic-round1.json')
+if round1:
+    steps.append({'module': 'visual-critic', 'asset': None, 'status': 'warn',
+                  'summary': B(f'第 1 轮：新开的 Claude 子代理对照概念图看四视角渲染，打 {round1["score"]}/10，判定退回 Blender 修整。{round1["summary"]["zh"]}',
+                               f'Round 1: a fresh Claude sub-agent compared the four views with the concept, scored {round1["score"]}/10 and routed it back to Blender. {round1["summary"]["en"]}'),
+                  'artifacts': [{'kind': 'image', 'path': 'runs/2026-10-15-001/blender/round1/overview.jpg', 'label': B('第 1 轮总览', 'Round 1 overview')}],
+                  'metrics': {'score': f'{round1["score"]}/10', 'verdict': round1.get('verdict'),
+                              **{f'flaw_{i + 1}': f'[{x.get("route")}] ' + x['en'][:90] for i, x in enumerate(round1.get('flaws', [])[:7])}}})
+if critic and critic.get('round', 1) >= 2:
     steps.append({'module': 'visual-critic', 'asset': None, 'status': 'ok' if critic['score'] >= 9 else 'warn',
-                  'summary': B(f'独立评审代理看四视角图打分 {critic["score"]}/10。{critic["summary"]["zh"]}', f'An independent critic scored the four views {critic["score"]}/10. {critic["summary"]["en"]}'),
+                  'summary': B(f'第 2 轮：Blender 修整后重新评审，{critic.get("previous_score")} → {critic["score"]}/10。{critic["summary"]["zh"]}',
+                               f'Round 2 after one Blender pass: {critic.get("previous_score")} → {critic["score"]}/10. {critic["summary"]["en"]}'),
                   'artifacts': [{'kind': 'image', 'path': r, 'label': B(n, n)} for r, n in zip(blender['renders'], ['overview', 'closeup', 'low angle', 'wireframe'])],
                   'metrics': {'score': f'{critic["score"]}/10', 'verdict': critic.get('verdict'),
-                              **{f'flaw_{i + 1}': x['en'] for i, x in enumerate(critic.get('flaws', [])[:4])}}})
+                              **{f'remaining_{i + 1}': f'[{x.get("route")}] ' + x['en'][:90] for i, x in enumerate(critic.get('flaws', [])[:5])}}})
 
 if blender.get('scene_model'):
     steps.append({'module': 'asset-library', 'asset': None, 'status': 'ok',
@@ -130,3 +140,19 @@ run = {'order_id': '2026-10-15-001', 'title': B('AI 产线微缩车间：一次�
        'steps': steps}
 (RUN / 'run.json').write_text(json.dumps(run, ensure_ascii=False, indent=1))
 print('steps', len(steps), 'status', run['status'])
+
+# library meta.json per asset (source, order, size, triangles, QA, critic)
+for x in blender['props']:
+    p = x['id'].split('-')[1]
+    qa = load(RUN / 'qa' / f'{x["id"]}.json') or {}
+    meta = {'id': x['id'], 'name': NAMES[p], 'order_id': run['order_id'], 'source': 'tripo image-to-model v3.1-20260211',
+            'raw_model': x['source'], 'model': x['library_model'], 'units': 'metres', 'pivot': 'bottom-centre',
+            'dimensions_m': x['dimensions_m'], 'triangles': x['triangles'], 'materials': x['materials'],
+            'normals_recalc_would_flip': x.get('normals_recalc_would_flip'), 'structure_qa': qa.get('status'),
+            'critic_score': (critic or {}).get('score'), 'license': 'Tripo generated asset; check Tripo terms before commercial use'}
+    (ROOT / 'library' / x['id'] / 'meta.json').write_text(json.dumps(meta, ensure_ascii=False, indent=1))
+if blender.get('scene_model'):
+    (ROOT / 'library' / 'workshop-scene' / 'meta.json').write_text(json.dumps(
+        {'id': 'workshop-scene', 'order_id': run['order_id'], 'model': blender['scene_model'], 'parts': [x['id'] for x in blender['props']],
+         'procedural': ['table', 'belts', 'glow cubes'], 'triangles': blender['checks'].get('scene_triangles'),
+         'critic_score': (critic or {}).get('score')}, ensure_ascii=False, indent=1))

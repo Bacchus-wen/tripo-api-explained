@@ -35,6 +35,6 @@
   "station": {
     "color": "#e07a3f",
     "icon": "wrench",
-    "model": null
+    "model": "library/workshop-workbench/model.glb"
   }
 }
