@@ -1,0 +1,95 @@
+{
+  "units": "metres (miniature diorama)",
+  "table": {
+    "width_m": 1.5,
+    "depth_m": 0.55,
+    "thickness_m": 0.04
+  },
+  "belt": {
+    "height_m": 0.045,
+    "width_m": 0.06
+  },
+  "props": [
+    {
+      "id": "workshop-printer",
+      "source": "assets/generated/models/tripo-b94758708e1b837a724f2c18/model.glb",
+      "x": -0.55,
+      "y": 0.0,
+      "height_m": 0.28,
+      "max_footprint_m": 0.3,
+      "max_tris": 40000,
+      "rot_z_deg": -90
+    },
+    {
+      "id": "workshop-workbench",
+      "source": "assets/generated/models/tripo-80e8215fd4d9c49769548413/model.glb",
+      "x": -0.18,
+      "y": 0.0,
+      "height_m": 0.22,
+      "max_footprint_m": 0.3,
+      "max_tris": 40000,
+      "rot_z_deg": 0
+    },
+    {
+      "id": "workshop-critic",
+      "source": "assets/generated/models/tripo-9d65593a59b81cf1ec0c998a/model.glb",
+      "x": 0.18,
+      "y": 0.0,
+      "height_m": 0.26,
+      "max_footprint_m": 0.3,
+      "max_tris": 40000,
+      "rot_z_deg": 0
+    },
+    {
+      "id": "workshop-shelf",
+      "source": "assets/generated/models/tripo-b6985ca8e1b6c0f64fc46115/model.glb",
+      "x": 0.55,
+      "y": 0.0,
+      "height_m": 0.4,
+      "max_footprint_m": 0.3,
+      "max_tris": 40000,
+      "rot_z_deg": -90
+    }
+  ],
+  "cameras": {
+    "overview": {
+      "loc": [
+        0.95,
+        -1.4,
+        0.85
+      ],
+      "target": [
+        0,
+        0,
+        0.12
+      ],
+      "lens": 40
+    },
+    "closeup": {
+      "loc": [
+        -0.8,
+        -0.6,
+        0.38
+      ],
+      "target": [
+        -0.55,
+        0,
+        0.13
+      ],
+      "lens": 50
+    },
+    "low_angle": {
+      "loc": [
+        0.05,
+        -1.45,
+        0.06
+      ],
+      "target": [
+        0,
+        0,
+        0.09
+      ],
+      "lens": 35
+    }
+  }
+}

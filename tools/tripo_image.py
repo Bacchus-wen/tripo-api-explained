@@ -43,13 +43,17 @@ def submit(project, operation_id, kind, body, input_file=None, input_task=None):
     path = _record_path(project, operation_id)
     request = {'kind': kind, 'body': body, 'input_file': input_file, 'input_task': input_task}
     request_sha = hashlib.sha256(json.dumps(request, sort_keys=True).encode()).hexdigest()
+    history = []
     if path.exists():
         record = json.loads(path.read_text())
         if record['request_sha256'] != request_sha:
             raise SystemExit('operation_id already used with a different request; choose a new id deliberately.')
-        return record  # never resubmit
+        # A 429 is a definite server-side rejection (no task created), so it may be sent again.
+        if not (record['status'] == 'submission_rejected' and record.get('http_status') == 429):
+            return record  # never resubmit
+        history = record.get('rejections', []) + [{k: record.get(k) for k in ('submitted_at', 'http_status', 'code')}]
     record = {'operation_id': operation_id, 'request': request, 'request_sha256': request_sha,
-              'status': 'submitting', 'submitted_at': tripo_api._now()}
+              'status': 'submitting', 'submitted_at': tripo_api._now(), 'rejections': history}
     _save(path, record)
     client = _client()
     payload = dict(body)

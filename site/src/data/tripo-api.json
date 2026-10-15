@@ -1,0 +1,708 @@
+{
+ "base": "https://openapi.tripo3d.ai/v3",
+ "docs": "https://developers.tripo3d.ai/en/docs/",
+ "groups": [
+  {
+   "id": "image",
+   "name": {
+    "zh": "图像生成",
+    "en": "Image generation"
+   }
+  },
+  {
+   "id": "model",
+   "name": {
+    "zh": "3D 生成",
+    "en": "3D generation"
+   }
+  },
+  {
+   "id": "post",
+   "name": {
+    "zh": "后处理",
+    "en": "Post-processing"
+   }
+  },
+  {
+   "id": "task",
+   "name": {
+    "zh": "任务与文件",
+    "en": "Tasks & files"
+   }
+  }
+ ],
+ "features": [
+  {
+   "id": "image-gen",
+   "group": "image",
+   "demo": "image-gen",
+   "status": "verified",
+   "name": {
+    "zh": "文生图 · 图生图",
+    "en": "Text-to-image · Image-to-image"
+   },
+   "endpoint": "POST /generation/text-to-image · POST /generation/image-to-image",
+   "what": {
+    "zh": "用一句话出图，或拿已有的图做修改、抽取、换风格。Tripo 把多家图像模型接在同一个接口后面。",
+    "en": "Make an image from a sentence, or edit, extract or restyle an existing one. Tripo puts several image models behind one API."
+   },
+   "when": {
+    "zh": "建模之前先出概念图锁定风格；再从概念图里抽出单个物体的参考图交给图生 3D。",
+    "en": "Before modelling: lock the look with a concept, then extract one clean reference per object for image-to-3D."
+   },
+   "models": [
+    {
+     "id": "seedream_v4",
+     "note": {
+      "zh": "默认，均衡",
+      "en": "Default, balanced"
+     }
+    },
+    {
+     "id": "seedream_v5",
+     "note": {
+      "zh": "质量更高，图生图编辑最强",
+      "en": "Higher quality; strongest for editing"
+     }
+    },
+    {
+     "id": "banana / banana_pro / banana2",
+     "note": {
+      "zh": "快速 / 高质量 / 最新快速",
+      "en": "Fast / higher quality / latest fast"
+     }
+    },
+    {
+     "id": "chat_image_2",
+     "note": {
+      "zh": "GPT 系最新",
+      "en": "Latest GPT-family"
+     }
+    },
+    {
+     "id": "chat_image_2.5_flare",
+     "note": {
+      "zh": "速度档，本站实测使用",
+      "en": "Speed tier — used on this site"
+     }
+    },
+    {
+     "id": "chat_image_2.5_sunburst",
+     "note": {
+      "zh": "保真档，编辑时最能保留原图",
+      "en": "Fidelity tier — best at preserving the rest of an image"
+     }
+    }
+   ],
+   "params": [
+    {
+     "name": "prompt",
+     "note": {
+      "zh": "必填（图生图有模板时可省）；中英文均可，负面词写在 --no 后",
+      "en": "Required (optional with a template on image-to-image); zh/en; negatives after --no"
+     }
+    },
+    {
+     "name": "size",
+     "note": {
+      "zh": "各模型支持的尺寸不同，默认 2048x2048",
+      "en": "Supported sizes vary by model; default 2048x2048"
+     }
+    },
+    {
+     "name": "quality",
+     "note": {
+      "zh": "仅 chat_image 系列；省略即 low，high 以上更贵更慢",
+      "en": "chat_image only; omitted = low; high+ costs more and is slower"
+     }
+    },
+    {
+     "name": "background",
+     "note": {
+      "zh": "仅 2.5 系列：auto / opaque / transparent",
+      "en": "2.5 tiers only: auto / opaque / transparent"
+     }
+    },
+    {
+     "name": "input / inputs",
+     "note": {
+      "zh": "图生图的参考图：公网 URL、file_token，或上一个图片任务的 task_id",
+      "en": "Image-to-image references: public URL, file_token, or a previous image task_id"
+     }
+    },
+    {
+     "name": "template",
+     "note": {
+      "zh": "如 t_pose、variants、figure、3d_enhance（让图更适合转 3D）",
+      "en": "e.g. t_pose, variants, figure, 3d_enhance (prepares an image for 3D)"
+     }
+    },
+    {
+     "name": "/v3/openai/images/*",
+     "note": {
+      "zh": "OpenAI 兼容接口，可以直接用 OpenAI SDK 调 gpt-image-2 / 2.5",
+      "en": "OpenAI-compatible endpoints: call gpt-image-2 / 2.5 with the OpenAI SDK"
+     }
+    }
+   ],
+   "request": "{\n  \"model\": \"chat_image_2.5_flare\",\n  \"prompt\": \"Miniature AI workshop diorama…\",\n  \"size\": \"1536x1024\",\n  \"quality\": \"medium\"\n}",
+   "credits": {
+    "zh": "按模型和尺寸档计费（≤1K / 2K / 4K）：seedream 一律 5；chat_image_2 与 2.5 系列 10/10/15，high 及以上更贵。本站实测：1536×1024、medium，约 25 秒，10 credits。图像生成每个账户同时只能跑 1 个任务。",
+    "en": "Priced per model and size tier (≤1K / 2K / 4K): seedream 5 flat; chat_image_2 and 2.5 tiers 10/10/15, more for high and above. Measured here: 1536×1024, medium, ~25 s, 10 credits. Image generation runs one task per account at a time."
+   }
+  },
+  {
+   "id": "model-chooser",
+   "group": "model",
+   "demo": "model-chooser",
+   "status": "verified",
+   "name": {
+    "zh": "图生 3D · 文生 3D",
+    "en": "Image-to-3D · Text-to-3D"
+   },
+   "endpoint": "POST /generation/image-to-model · POST /generation/text-to-model",
+   "what": {
+    "zh": "把一张图（或一句话）变成带贴图的 3D 模型。核心是选对模型系列：H 系列追求细节，P 系列追求干净的低面数。",
+    "en": "Turns an image (or a sentence) into a textured 3D model. The key choice is the model family: H for detail, P for clean low-poly."
+   },
+   "when": {
+    "zh": "主体道具、角色、生物、造型复杂的物体。规则几何（桌子、底座、重复构件）用代码生成更划算。",
+    "en": "Hero props, characters, creatures, complex shapes. Regular geometry (tables, bases, repeated parts) is cheaper to generate in code."
+   },
+   "models": [
+    {
+     "id": "v3.1-20260211",
+     "note": {
+      "zh": "H 系列最新，高精度，默认推荐；主体资产、3D 打印",
+      "en": "Latest H-series, high precision, default; hero assets, 3D printing"
+     }
+    },
+    {
+     "id": "v3.0-20250812 / v2.5-20250123",
+     "note": {
+      "zh": "H 系列旧版，兼容老项目",
+      "en": "Older H-series for compatibility"
+     }
+    },
+    {
+     "id": "P1-20260311",
+     "note": {
+      "zh": "P 系列低面数，face_limit 50–20,000，拓扑干净；游戏、移动端",
+      "en": "P-series low-poly, face_limit 50–20,000, clean topology; games, mobile"
+     }
+    },
+    {
+     "id": "P2-20260801",
+     "note": {
+      "zh": "P 系列预览版，支持四边面，面数到 50,000",
+      "en": "P-series preview, supports quads, up to 50,000 faces"
+     }
+    }
+   ],
+   "params": [
+    {
+     "name": "input",
+     "note": {
+      "zh": "file_token、公网 URL，或 Tripo 图片任务的 task_id",
+      "en": "file_token, public URL, or a Tripo image task_id"
+     }
+    },
+    {
+     "name": "texture / pbr",
+     "note": {
+      "zh": "默认都开；只要白模必须两个都设 false",
+      "en": "Both on by default; set both false for bare geometry"
+     }
+    },
+    {
+     "name": "face_limit",
+     "note": {
+      "zh": "H 系列不传就自适应（最高 150 万面）；P1 为 50–20,000",
+      "en": "H-series adapts if omitted (up to 1.5M); P1 50–20,000"
+     }
+    },
+    {
+     "name": "smart_low_poly",
+     "note": {
+      "zh": "H 系列一键低模，面数 500–20,000，+10 credits",
+      "en": "H-series one-click low-poly, 500–20,000 faces, +10 credits"
+     }
+    },
+    {
+     "name": "geometry_quality",
+     "note": {
+      "zh": "detailed 即 Ultra 几何，+20 credits",
+      "en": "detailed = Ultra geometry, +20 credits"
+     }
+    },
+    {
+     "name": "texture_quality",
+     "note": {
+      "zh": "fast / standard / detailed / extreme（8K）",
+      "en": "fast / standard / detailed / extreme (8K)"
+     }
+    },
+    {
+     "name": "quad",
+     "note": {
+      "zh": "四边面，强制输出 FBX，+5 credits",
+      "en": "Quads; forces FBX output, +5 credits"
+     }
+    },
+    {
+     "name": "auto_size · export_uv",
+     "note": {
+      "zh": "按真实米制尺寸输出、导出 UV",
+      "en": "Real-world metre scale, export UVs"
+     }
+    }
+   ],
+   "request": "{\n  \"input\": \"<file_token | image task_id>\",\n  \"model\": \"v3.1-20260211\",\n  \"texture\": true,\n  \"pbr\": true,\n  \"face_limit\": 10000\n}",
+   "credits": {
+    "zh": "图生 3D：H 系列 20（白模）/ 30（带贴图）；P1 40/50；P2 100/110。本站实测 v3.1 带 PBR：30 credits，与定价一致。1 credit = 0.01 美元。",
+    "en": "Image-to-3D: H-series 20 (bare) / 30 (textured); P1 40/50; P2 100/110. Measured here, v3.1 with PBR: 30 credits, matching the price list. 1 credit = $0.01."
+   }
+  },
+  {
+   "id": "splat",
+   "group": "model",
+   "demo": "splat",
+   "status": "documented",
+   "name": {
+    "zh": "高斯泼溅",
+    "en": "Gaussian splat"
+   },
+   "endpoint": "POST /generation/image-to-splat",
+   "what": {
+    "zh": "从一张图生成由无数半透明小点组成的 .splat，看起来很写实，但它不是网格，不能直接编辑或进游戏引擎。",
+    "en": "Turns one image into a .splat made of countless soft translucent points: photoreal-looking, but not a mesh, so it can’t be edited or used as game geometry directly."
+   },
+   "when": {
+    "zh": "网页或展示里要“看起来像照片”的实时预览。",
+    "en": "Photo-like real-time previews on the web or in showcases."
+   },
+   "models": [],
+   "params": [
+    {
+     "name": "input · model_seed",
+     "note": {
+      "zh": "一张图；可固定随机种子",
+      "en": "One image; optional fixed seed"
+     }
+    }
+   ],
+   "request": "{\n  \"input\": \"<file_token>\"\n}",
+   "credits": {
+    "zh": "固定 30，约 4 分钟。",
+    "en": "30 flat, about 4 minutes."
+   }
+  },
+  {
+   "id": "texture-pbr",
+   "group": "model",
+   "demo": "texture-pbr",
+   "status": "verified",
+   "name": {
+    "zh": "贴图与 PBR",
+    "en": "Texture & PBR"
+   },
+   "endpoint": "texture / pbr · POST /models/texture",
+   "what": {
+    "zh": "同一个模型可以只要白模、要基础颜色，或要完整的 PBR 材质（粗糙度、金属度、法线），光照下才显得真实。",
+    "en": "The same model can come bare, with base colour, or with full PBR (roughness, metalness, normals) so it reacts to light realistically."
+   },
+   "when": {
+    "zh": "要在网页或引擎里直接展示：开 PBR。打算自己在 Blender 里重做材质：关掉贴图省时间。已有模型想换皮：用重新贴图接口。",
+    "en": "Showing it directly in a browser or engine: PBR on. Re-materialising in Blender: textures off. Re-skinning an existing model: use the re-texture endpoint."
+   },
+   "models": [],
+   "params": [
+    {
+     "name": "texture_quality",
+     "note": {
+      "zh": "fast / standard / detailed / extreme（8K）",
+      "en": "fast / standard / detailed / extreme (8K)"
+     }
+    },
+    {
+     "name": "texture_prompt",
+     "note": {
+      "zh": "重新贴图：text、image、images 三选一；四视图顺序为 front, left, back, right",
+      "en": "Re-texture: one of text, image, images; four views ordered front, left, back, right"
+     }
+    },
+    {
+     "name": "delight · bake",
+     "note": {
+      "zh": "去掉烘焙进贴图的光影、把材质烘焙成贴图",
+      "en": "Remove baked lighting; bake materials into textures"
+     }
+    }
+   ],
+   "request": "{\n  \"input\": \"<model task_id>\",\n  \"texture_prompt\": { \"text\": \"weathered teal paint\" }\n}",
+   "credits": {
+    "zh": "建模时开贴图已含在价格里。单独重新贴图：Fast 10 / Standard 10 / HD 20 / 8K 30。",
+    "en": "Texturing during generation is included. Re-texturing alone: Fast 10 / Standard 10 / HD 20 / 8K 30."
+   }
+  },
+  {
+   "id": "multiview",
+   "group": "model",
+   "demo": "multiview",
+   "status": "documented",
+   "name": {
+    "zh": "多视图建模",
+    "en": "Multiview to 3D"
+   },
+   "endpoint": "POST /generation/image-to-multiview · POST /generation/multiview-to-model",
+   "what": {
+    "zh": "先用一张图生成前、左、后、右四个视图（也可以用自己拍的），再用多视图建模，比只看一张图更准确。",
+    "en": "Generate front/left/back/right views from one image (or use your own photos), then build from multiple views for a more faithful model."
+   },
+   "when": {
+    "zh": "有产品实拍或设计三视图时。",
+    "en": "When you have product photos or design orthographic views."
+   },
+   "models": [],
+   "params": [
+    {
+     "name": "inputs",
+     "note": {
+      "zh": "四张图按 [front, left, back, right] 排列，必须有 front，至少 2 张",
+      "en": "Ordered [front, left, back, right]; front required, at least 2 images"
+     }
+    },
+    {
+     "name": "edit-multiview",
+     "note": {
+      "zh": "可以逐个视图修改，每张 5 credits",
+      "en": "Edit individual views, 5 credits each"
+     }
+    }
+   ],
+   "request": "{\n  \"inputs\": [\"<front>\", \"<left>\", \"<back>\", \"<right>\"],\n  \"model\": \"v3.1-20260211\"\n}",
+   "credits": {
+    "zh": "生成四视图 10；多视图建模 H 系列 20/30，P1 40/50。",
+    "en": "Generate four views: 10; multiview-to-3D H-series 20/30, P1 40/50."
+   }
+  },
+  {
+   "id": "segmentation",
+   "group": "post",
+   "demo": "segmentation",
+   "status": "documented",
+   "name": {
+    "zh": "分件",
+    "en": "Part segmentation"
+   },
+   "endpoint": "POST /mesh/segment · POST /mesh/complete · generate_parts",
+   "what": {
+    "zh": "把一个整体模型拆成独立部件；拆开后被挡住的部分可以用补全接口补齐。也可以在建模时直接要求分件输出。",
+    "en": "Split one model into parts; hidden surfaces revealed by the split can be filled with the completion endpoint. Or ask for parts during generation."
+   },
+   "when": {
+    "zh": "需要单独换色、替换零件或给某个部件做动画时。",
+    "en": "When you need to recolour, swap or animate individual pieces."
+   },
+   "models": [
+    {
+     "id": "v1.0-20250506",
+     "note": {
+      "zh": "默认，按几何拆分",
+      "en": "Default, geometry-based"
+     }
+    },
+    {
+     "id": "v2.0-20260430",
+     "note": {
+      "zh": "Beta，带语义标签（例如“车轮”）",
+      "en": "Beta, with semantic labels (e.g. ‘wheel’)"
+     }
+    }
+   ],
+   "params": [
+    {
+     "name": "generate_parts",
+     "note": {
+      "zh": "建模时直接分件，要求 texture 和 pbr 都为 false，+20 credits",
+      "en": "Parts at generation time; needs texture and pbr false, +20 credits"
+     }
+    },
+    {
+     "name": "segmentation_granularity",
+     "note": {
+      "zh": "v2 专用，控制拆多细",
+      "en": "v2 only: how fine to split"
+     }
+    },
+    {
+     "name": "/mesh/smartsegment",
+     "note": {
+      "zh": "一步完成：从图片或模型直接得到分件结果",
+      "en": "One step from an image or model to parts"
+     }
+    }
+   ],
+   "request": "{\n  \"input\": \"<model task_id>\",\n  \"model\": \"v2.0-20260430\"\n}",
+   "credits": {
+    "zh": "分割 40；部件补全 50（快速封口 30）；智能分割 图片 85 / 模型 55。",
+    "en": "Segment 40; part completion 50 (quick cap 30); smart segmentation image 85 / model 55."
+   }
+  },
+  {
+   "id": "retopology",
+   "group": "post",
+   "demo": "model-chooser",
+   "status": "documented",
+   "name": {
+    "zh": "重拓扑与 UV",
+    "en": "Retopology & UV"
+   },
+   "endpoint": "POST /mesh/decimate · POST /mesh/uv",
+   "what": {
+    "zh": "把太密的模型减到目标面数、整理成干净的三角面或四边面；Smart UV 重新展开贴图坐标，原贴图和骨骼会一起映射过去。",
+    "en": "Reduce a dense model to a target face count with clean triangles or quads; Smart UV re-unwraps texture coordinates and carries textures and rigs across."
+   },
+   "when": {
+    "zh": "要进游戏引擎、手机或网页，面数和 UV 必须可控的时候。",
+    "en": "When a model must hit a face and UV budget for engines, phones or the web."
+   },
+   "models": [
+    {
+     "id": "v3.0",
+     "note": {
+      "zh": "可选 smart_uv，三角 500–20,000、四边 500–10,000",
+      "en": "Optional smart_uv; tris 500–20,000, quads 500–10,000"
+     }
+    },
+    {
+     "id": "v2.0 / v1.0",
+     "note": {
+      "zh": "v2.0 默认；v1.0 面数上限更高",
+      "en": "v2.0 default; v1.0 allows higher limits"
+     }
+    }
+   ],
+   "params": [
+    {
+     "name": "face_limit · quad",
+     "note": {
+      "zh": "目标面数、是否四边面",
+      "en": "Target faces, quads or not"
+     }
+    }
+   ],
+   "request": "{\n  \"input\": \"<model task_id>\",\n  \"model\": \"v3.0\",\n  \"face_limit\": 8000,\n  \"smart_uv\": true\n}",
+   "credits": {
+    "zh": "重拓扑 v3.0 三角 35 / 四边 40，v2.0 30，v1.0 10；Smart UV 20。",
+    "en": "Retopology v3.0 tris 35 / quads 40, v2.0 30, v1.0 10; Smart UV 20."
+   }
+  },
+  {
+   "id": "rig-animate",
+   "group": "post",
+   "demo": "rig-animate",
+   "status": "documented",
+   "name": {
+    "zh": "绑骨与动画",
+    "en": "Rig & animate"
+   },
+   "endpoint": "POST /animations/rig-check · /animations/rig · /animations/retarget",
+   "what": {
+    "zh": "先免费检查模型能不能绑骨，再自动绑骨，最后给它套上走、跑、跳等预设动作。",
+    "en": "Check for free whether a model can be rigged, auto-rig it, then apply preset motions like walk, run or jump."
+   },
+   "when": {
+    "zh": "角色要在游戏或视频里动起来时。",
+    "en": "When a character needs to move in a game or video."
+   },
+   "models": [
+    {
+     "id": "v1.0-20240301",
+     "note": {
+      "zh": "人形（biped），90+ 预设动作",
+      "en": "Humanoid (biped), 90+ preset motions"
+     }
+    },
+    {
+     "id": "v2.5-20260210",
+     "note": {
+      "zh": "非人形：四足、鸟类、蛇形、水生等",
+      "en": "Non-humanoid: quadruped, avian, serpentine, aquatic…"
+     }
+    }
+   ],
+   "params": [
+    {
+     "name": "rig_type",
+     "note": {
+      "zh": "biped / quadruped / hexapod / octopod / avian / serpentine / aquatic",
+      "en": "biped / quadruped / hexapod / octopod / avian / serpentine / aquatic"
+     }
+    },
+    {
+     "name": "spec",
+     "note": {
+      "zh": "tripo 或 mixamo 骨骼规范",
+      "en": "tripo or mixamo skeleton spec"
+     }
+    },
+    {
+     "name": "animation",
+     "note": {
+      "zh": "如 preset:walk；retarget 只接受 rig 任务的 task_id",
+      "en": "e.g. preset:walk; retarget takes a rig task_id"
+     }
+    }
+   ],
+   "request": "{\n  \"input\": \"<rig task_id>\",\n  \"animation\": \"preset:walk\"\n}",
+   "credits": {
+    "zh": "能否绑骨检查免费；自动绑骨 25；每个动作 10。",
+    "en": "Rig check free; auto-rig 25; 10 per animation."
+   }
+  },
+  {
+   "id": "stylize",
+   "group": "post",
+   "demo": "stylize",
+   "status": "unconfirmed",
+   "name": {
+    "zh": "风格化",
+    "en": "Stylize"
+   },
+   "endpoint": "POST /models/stylize",
+   "what": {
+    "zh": "把模型转成乐高、体素等风格。V3 文档目前只在迁移表里列出这个接口，没有参数说明，所以这里只是概念演示。",
+    "en": "Converts a model into styles like brick or voxel. The V3 docs list this endpoint only in the migration table with no parameter page, so this is a concept demo."
+   },
+   "when": {
+    "zh": "同一套资产要适配不同风格的游戏或视觉。",
+    "en": "When one asset set must fit different art directions."
+   },
+   "models": [],
+   "params": [],
+   "request": "",
+   "credits": {
+    "zh": "未列价，以官方为准。",
+    "en": "Not priced in the docs."
+   }
+  },
+  {
+   "id": "convert-export",
+   "group": "post",
+   "demo": "convert-export",
+   "status": "documented",
+   "name": {
+    "zh": "格式转换",
+    "en": "Convert & export"
+   },
+   "endpoint": "POST /models/convert",
+   "what": {
+    "zh": "把模型转成不同软件需要的格式，顺便整理：减面、四边面、把轴心放到底部、缩放、贴图尺寸。",
+    "en": "Converts a model for each tool and tidies it: decimate, quads, pivot to bottom-centre, scale, texture size."
+   },
+   "when": {
+    "zh": "网页用 GLB，引擎常用 FBX，苹果 AR 用 USDZ，3D 打印用 STL。",
+    "en": "GLB for web, FBX for engines, USDZ for Apple AR, STL for printing."
+   },
+   "models": [],
+   "params": [
+    {
+     "name": "format",
+     "note": {
+      "zh": "GLTF / FBX / USDZ / OBJ / STL / 3MF",
+      "en": "GLTF / FBX / USDZ / OBJ / STL / 3MF"
+     }
+    },
+    {
+     "name": "fbx_preset",
+     "note": {
+      "zh": "blender / 3dsmax / mixamo / bake_scale",
+      "en": "blender / 3dsmax / mixamo / bake_scale"
+     }
+    },
+    {
+     "name": "pivot_to_center_bottom · scale_factor",
+     "note": {
+      "zh": "轴心放到底部中心、整体缩放",
+      "en": "Pivot to bottom-centre, uniform scale"
+     }
+    },
+    {
+     "name": "export_orientation",
+     "note": {
+      "zh": "调整朝向要放在最后一步做，否则后续绑骨或贴图可能方向错误",
+      "en": "Set orientation only at the last step, or later rigging/texturing may face the wrong way"
+     }
+    }
+   ],
+   "request": "{\n  \"input\": \"<model task_id>\",\n  \"format\": \"FBX\",\n  \"fbx_preset\": \"blender\"\n}",
+   "credits": {
+    "zh": "基础转换 5；用了减面、四边面、改轴心、缩放、贴图尺寸等高级选项为 10。",
+    "en": "Basic 5; 10 with advanced options such as face limit, quads, pivot, scale or texture size."
+   }
+  },
+  {
+   "id": "task-lifecycle",
+   "group": "task",
+   "demo": "task-lifecycle",
+   "status": "verified",
+   "name": {
+    "zh": "异步任务",
+    "en": "How a task runs"
+   },
+   "endpoint": "POST /files · GET /tasks/{task_id}",
+   "what": {
+    "zh": "所有生成都是异步任务：提交后拿到 task_id，轮询状态，成功后尽快下载。",
+    "en": "Every generation is an async task: submit, get a task_id, poll, download soon after success."
+   },
+   "when": {
+    "zh": "每一次调用都会遇到。理解它就能避免重复扣费。",
+    "en": "Every call. Understanding it prevents double charges."
+   },
+   "models": [],
+   "params": [
+    {
+     "name": "status",
+     "note": {
+      "zh": "queued → running → success；终态还有 failed / cancelled / banned / expired",
+      "en": "queued → running → success; other terminal states: failed / cancelled / banned / expired"
+     }
+    },
+    {
+     "name": "429 · code 2000",
+     "note": {
+      "zh": "并发上限：同类任务同时只能跑一个（本站制作时真实遇到）",
+      "en": "Concurrency limit: one task of a kind at a time (hit for real while building this site)"
+     }
+    },
+    {
+     "name": "429 · code 1007",
+     "note": {
+      "zh": "频率限制，按 API Key 计算",
+      "en": "Rate limit, per API key"
+     }
+    },
+    {
+     "name": "model_url",
+     "note": {
+      "zh": "下载链接约 5 分钟失效，过期就重新查询原任务",
+      "en": "Download links expire in ~5 min; re-query the same task"
+     }
+    },
+    {
+     "name": "POST /files",
+     "note": {
+      "zh": "上传 JPEG/PNG，最大 20 MB，返回 file_token",
+      "en": "Upload JPEG/PNG up to 20 MB, returns file_token"
+     }
+    }
+   ],
+   "request": "GET /v3/tasks/<task_id>\n→ { \"status\": \"success\", \"progress\": 100,\n    \"output\": { \"model_url\": \"…\" } }",
+   "credits": {
+    "zh": "提交时冻结额度，成功才扣除，失败或取消会释放。官方没有幂等键，所以付费请求不能盲目重发。",
+    "en": "Credits are frozen at submit, charged on success, released on failure. There is no idempotency key, so never blindly resend a paid request."
+   }
+  }
+ ]
+}

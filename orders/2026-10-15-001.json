@@ -1,0 +1,15 @@
+{
+  "order_id": "2026-10-15-001",
+  "brief": "AI 产线微缩车间：4 个主体道具（Tripo 打印机、Blender 工作台、四机位评审台、资产库货架）+ 程序化桌面与传送带，用于讲解网站",
+  "assets": [
+    {"name": "workshop-printer", "source": "tripo", "height_m": 0.28, "max_faces": 10000},
+    {"name": "workshop-workbench", "source": "tripo", "height_m": 0.22, "max_faces": 10000},
+    {"name": "workshop-critic", "source": "tripo", "height_m": 0.26, "max_faces": 10000},
+    {"name": "workshop-shelf", "source": "tripo", "height_m": 0.40, "max_faces": 10000},
+    {"name": "table-and-belts", "source": "procedural"}
+  ],
+  "targets": ["blender-showcase", "web-threejs"],
+  "budget": {"images": 6, "tripo_models": 5},
+  "acceptance": {"structure_qa": "inspect_asset.py", "blender": "save/reopen + export/re-import", "critic": {"views": ["overview", "closeup", "low_angle", "wireframe"], "min_score": 9, "max_rounds": 1}},
+  "deliver": {"formats": ["glb", "png"]}
+}

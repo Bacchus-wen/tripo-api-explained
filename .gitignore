@@ -5,3 +5,5 @@ site/dist/
 site/public/data/
 .asset-jobs.sqlite3*
 *.blend1
+site/qa/
+site/harness/
