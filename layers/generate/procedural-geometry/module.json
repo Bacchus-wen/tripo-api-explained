@@ -1,0 +1,41 @@
+{
+  "id": "procedural-geometry",
+  "layer": "generate",
+  "order": 35,
+  "status": "live",
+  "name": {
+    "zh": "程序化几何",
+    "en": "Procedural Geometry"
+  },
+  "summary": {
+    "zh": "桌面、底座、传送带、重复构件这类规则几何直接用代码生成，精确、可调、不花生成费用。",
+    "en": "Tables, bases, belts and repeated parts are generated in code: precise, tweakable and free."
+  },
+  "tools": [
+    "Blender Python",
+    "three.js"
+  ],
+  "inputs": [
+    {
+      "zh": "平面图坐标",
+      "en": "Floor-plan coordinates"
+    }
+  ],
+  "outputs": [
+    {
+      "zh": "网格或 glb",
+      "en": "Mesh or glb"
+    }
+  ],
+  "qa": [
+    {
+      "zh": "尺寸与平面图一致",
+      "en": "Dimensions match the plan"
+    }
+  ],
+  "station": {
+    "color": "#4f7cac",
+    "icon": "cube",
+    "model": null
+  }
+}

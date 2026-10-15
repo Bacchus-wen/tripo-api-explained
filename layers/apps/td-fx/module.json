@@ -1,0 +1,35 @@
+{
+  "id": "td-fx",
+  "layer": "apps",
+  "order": 140,
+  "status": "planned",
+  "name": {
+    "zh": "TouchDesigner 效果",
+    "en": "TouchDesigner FX"
+  },
+  "summary": {
+    "zh": "用 TD MCP 把资产接进实时视觉效果。",
+    "en": "Brings assets into real-time visuals via TouchDesigner MCP."
+  },
+  "tools": [
+    "TouchDesigner MCP"
+  ],
+  "inputs": [
+    {
+      "zh": "资产库",
+      "en": "Library"
+    }
+  ],
+  "outputs": [
+    {
+      "zh": "实时效果工程",
+      "en": "Real-time FX project"
+    }
+  ],
+  "qa": [],
+  "station": {
+    "color": "#9aa1ad",
+    "icon": "wave",
+    "model": null
+  }
+}

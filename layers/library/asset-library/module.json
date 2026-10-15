@@ -1,0 +1,40 @@
+{
+  "id": "asset-library",
+  "layer": "library",
+  "order": 70,
+  "status": "live",
+  "name": {
+    "zh": "资产库",
+    "en": "Asset Library"
+  },
+  "summary": {
+    "zh": "所有资产统一存成 glb 加 meta.json，记录来源、订单、尺寸、面数、质检结果。下游场景只从这里取货。",
+    "en": "Every asset is stored as glb plus meta.json with source, order, size, triangle count and QA results. Downstream scenes only take from here."
+  },
+  "tools": [
+    "glb + meta.json"
+  ],
+  "inputs": [
+    {
+      "zh": "通过评审的资产",
+      "en": "Approved assets"
+    }
+  ],
+  "outputs": [
+    {
+      "zh": "library/<id>/",
+      "en": "library/<id>/"
+    }
+  ],
+  "qa": [
+    {
+      "zh": "meta.json 字段完整",
+      "en": "Complete meta.json"
+    }
+  ],
+  "station": {
+    "color": "#7d8698",
+    "icon": "shelf",
+    "model": null
+  }
+}

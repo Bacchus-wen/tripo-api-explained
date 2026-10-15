@@ -1,0 +1,35 @@
+{
+  "id": "blender-showcase",
+  "layer": "apps",
+  "order": 110,
+  "status": "live",
+  "name": {
+    "zh": "Blender 展示出片",
+    "en": "Blender Showcase"
+  },
+  "summary": {
+    "zh": "灯光、相机、转台都是脚本模板，资产进来就能出展示图和视频。",
+    "en": "Lighting, cameras and turntables are script templates: drop an asset in, get stills and video out."
+  },
+  "tools": [
+    "Blender 5.2"
+  ],
+  "inputs": [
+    {
+      "zh": "资产库",
+      "en": "Library"
+    }
+  ],
+  "outputs": [
+    {
+      "zh": "展示图、转台视频",
+      "en": "Stills, turntable video"
+    }
+  ],
+  "qa": [],
+  "station": {
+    "color": "#e07a3f",
+    "icon": "film",
+    "model": null
+  }
+}

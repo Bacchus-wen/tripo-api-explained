@@ -1,0 +1,41 @@
+{
+  "id": "visual-critic",
+  "layer": "process",
+  "order": 60,
+  "status": "live",
+  "name": {
+    "zh": "四视角评审",
+    "en": "Four-View Critic"
+  },
+  "summary": {
+    "zh": "渲染 3/4 总览、近景、低机位、线框四张图，交给独立的评审代理挑至少 3 个具体问题并打分，不合格按问题类型退回对应环节。",
+    "en": "Renders overview, close-up, low-angle and wireframe views; an independent critic lists at least three concrete flaws and scores the scene, routing failures back to the right step."
+  },
+  "tools": [
+    "Four-view renders",
+    "Critic sub-agent"
+  ],
+  "inputs": [
+    {
+      "zh": "场景 .blend",
+      "en": "Scene .blend"
+    }
+  ],
+  "outputs": [
+    {
+      "zh": "四视角截图、评分与问题清单",
+      "en": "Four renders, score and flaw list"
+    }
+  ],
+  "qa": [
+    {
+      "zh": "目标分数 9/10，轮数有上限",
+      "en": "Target 9/10 with a round cap"
+    }
+  ],
+  "station": {
+    "color": "#b05cc8",
+    "icon": "camera",
+    "model": null
+  }
+}

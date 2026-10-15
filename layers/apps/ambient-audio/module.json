@@ -1,0 +1,35 @@
+{
+  "id": "ambient-audio",
+  "layer": "apps",
+  "order": 160,
+  "status": "planned",
+  "name": {
+    "zh": "氛围音",
+    "en": "Ambient Audio"
+  },
+  "summary": {
+    "zh": "ElevenLabs 生成环境音和音效，给展示视频和网页加氛围。",
+    "en": "ElevenLabs generates ambience and sound effects for showcase videos and web scenes."
+  },
+  "tools": [
+    "ElevenLabs"
+  ],
+  "inputs": [
+    {
+      "zh": "场景描述",
+      "en": "Scene description"
+    }
+  ],
+  "outputs": [
+    {
+      "zh": "环境音、音效",
+      "en": "Ambience, SFX"
+    }
+  ],
+  "qa": [],
+  "station": {
+    "color": "#9aa1ad",
+    "icon": "sound",
+    "model": null
+  }
+}

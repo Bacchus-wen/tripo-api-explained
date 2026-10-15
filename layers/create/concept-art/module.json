@@ -1,0 +1,40 @@
+{
+  "id": "concept-art",
+  "layer": "create",
+  "order": 20,
+  "status": "live",
+  "name": {
+    "zh": "概念图与签字",
+    "en": "Concept Art & Sign-off"
+  },
+  "summary": {
+    "zh": "先出整体概念图锁定风格和光影，人确认后再为每个道具出参考图。2D 先对齐，比直接写 3D 便宜得多。",
+    "en": "Generate a whole-scene concept to lock style and lighting, get human sign-off, then make one reference image per prop. Aligning in 2D is far cheaper than iterating in 3D."
+  },
+  "tools": [
+    "GPT Image (game-assets MCP)"
+  ],
+  "inputs": [
+    {
+      "zh": "订单",
+      "en": "Order"
+    }
+  ],
+  "outputs": [
+    {
+      "zh": "整体概念图、道具参考图",
+      "en": "Scene concept, prop reference images"
+    }
+  ],
+  "qa": [
+    {
+      "zh": "用户签字",
+      "en": "Human sign-off"
+    }
+  ],
+  "station": {
+    "color": "#8a6fd1",
+    "icon": "palette",
+    "model": null
+  }
+}

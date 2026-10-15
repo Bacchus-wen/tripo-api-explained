@@ -1,0 +1,35 @@
+{
+  "id": "ue-scene",
+  "layer": "apps",
+  "order": 130,
+  "status": "planned",
+  "name": {
+    "zh": "UE 游戏场景",
+    "en": "Unreal Engine Scene"
+  },
+  "summary": {
+    "zh": "通过 Epic 官方 Unreal MCP 把资产搭进 UE 场景。",
+    "en": "Builds Unreal scenes from library assets via Epic's Unreal MCP."
+  },
+  "tools": [
+    "Unreal MCP (UE 5.8+)"
+  ],
+  "inputs": [
+    {
+      "zh": "资产库",
+      "en": "Library"
+    }
+  ],
+  "outputs": [
+    {
+      "zh": "UE 关卡",
+      "en": "UE level"
+    }
+  ],
+  "qa": [],
+  "station": {
+    "color": "#9aa1ad",
+    "icon": "gamepad",
+    "model": null
+  }
+}

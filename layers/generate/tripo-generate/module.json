@@ -1,0 +1,41 @@
+{
+  "id": "tripo-generate",
+  "layer": "generate",
+  "order": 30,
+  "status": "live",
+  "name": {
+    "zh": "Tripo 图生 3D",
+    "en": "Tripo Image-to-3D"
+  },
+  "summary": {
+    "zh": "用道具参考图调用 Tripo 直连 API 生成带 PBR 贴图的模型。适合角色、生物、有机形体和造型复杂的主体道具。",
+    "en": "Calls the Tripo API with a prop reference to produce a model with PBR textures. Best for characters, creatures, organic shapes and complex hero props."
+  },
+  "tools": [
+    "Tripo API v3.1",
+    "game-assets tripo_api.py"
+  ],
+  "inputs": [
+    {
+      "zh": "道具参考图",
+      "en": "Prop reference image"
+    }
+  ],
+  "outputs": [
+    {
+      "zh": "带 PBR 贴图的 glb",
+      "en": "glb with PBR textures"
+    }
+  ],
+  "qa": [
+    {
+      "zh": "保存 task_id，不自动重复提交付费请求",
+      "en": "Keep task_id; never auto-resubmit paid requests"
+    }
+  ],
+  "station": {
+    "color": "#3fa7a0",
+    "icon": "printer",
+    "model": null
+  }
+}

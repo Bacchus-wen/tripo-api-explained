@@ -1,0 +1,36 @@
+{
+  "id": "promo-video",
+  "layer": "apps",
+  "order": 150,
+  "status": "planned",
+  "name": {
+    "zh": "宣传视频",
+    "en": "Promo Video"
+  },
+  "summary": {
+    "zh": "Gemini 写脚本和分镜，Seedance 以展示渲染为参考生成宣传短片。",
+    "en": "Gemini writes the script and storyboard; Seedance generates a promo clip referencing the showcase renders."
+  },
+  "tools": [
+    "Gemini",
+    "Seedance"
+  ],
+  "inputs": [
+    {
+      "zh": "展示图、转台视频",
+      "en": "Stills, turntable"
+    }
+  ],
+  "outputs": [
+    {
+      "zh": "宣传短片",
+      "en": "Promo clip"
+    }
+  ],
+  "qa": [],
+  "station": {
+    "color": "#9aa1ad",
+    "icon": "clapper",
+    "model": null
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "structure-qa",
+  "layer": "process",
+  "order": 40,
+  "status": "live",
+  "name": {
+    "zh": "结构质检",
+    "en": "Structural QA"
+  },
+  "summary": {
+    "zh": "只读检查原始 glb：网格、三角面数、UV、材质与贴图是否齐全。结构报告不能代替美术和 Blender 检查。",
+    "en": "Read-only checks on the raw glb: meshes, triangle count, UVs, materials and textures. A structural report does not replace art or Blender checks."
+  },
+  "tools": [
+    "inspect_asset.py (Grok)"
+  ],
+  "inputs": [
+    {
+      "zh": "原始 glb",
+      "en": "Raw glb"
+    }
+  ],
+  "outputs": [
+    {
+      "zh": "QA 报告 JSON",
+      "en": "QA report JSON"
+    }
+  ],
+  "qa": [
+    {
+      "zh": "warning 需逐条阅读，不因报错自动重新生成",
+      "en": "Read every warning; never auto-regenerate on errors"
+    }
+  ],
+  "station": {
+    "color": "#6c8a3c",
+    "icon": "scan",
+    "model": null
+  }
+}

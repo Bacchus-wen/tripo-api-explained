@@ -1,0 +1,36 @@
+{
+  "id": "web-threejs",
+  "layer": "apps",
+  "order": 120,
+  "status": "live",
+  "name": {
+    "zh": "网页 three.js",
+    "en": "Web three.js"
+  },
+  "summary": {
+    "zh": "直接在浏览器里加载 glb。你现在看到的这个网站就是这个模块的产物。",
+    "en": "Loads glb directly in the browser. The site you are looking at is this module's output."
+  },
+  "tools": [
+    "three.js",
+    "Vite"
+  ],
+  "inputs": [
+    {
+      "zh": "资产库",
+      "en": "Library"
+    }
+  ],
+  "outputs": [
+    {
+      "zh": "可交互网页",
+      "en": "Interactive web page"
+    }
+  ],
+  "qa": [],
+  "station": {
+    "color": "#ffb347",
+    "icon": "globe",
+    "model": null
+  }
+}
