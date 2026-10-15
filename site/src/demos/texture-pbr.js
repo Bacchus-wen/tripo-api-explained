@@ -1,132 +1,129 @@
-// Demo: bare clay -> base-colour texture -> full PBR on a little wooden barrel with iron bands.
+// Demo: bare clay -> base colour -> full PBR on an ornate treasure chest, with a wipe that
+// compares the chosen mode (left) against PBR (right) on the very same model.
 import { createStage, createPanel } from './_stage.js';
+import { buildChest } from './lib/mat-chest.js';
+import { getMatTextures, disposeMatTextures } from './lib/mat-textures.js';
 
-// Procedural maps: colour, ORM (G=roughness, B=metalness) and a normal map from a height field.
-function makeMaps(THREE) {
-  const W = 1024, H = 512, PL = 14;
-  const mk = () => { const c = document.createElement('canvas'); c.width = W; c.height = H; return c; };
-  const cCol = mk(), cOrm = mk(), cNor = mk();
-  const col = cCol.getContext('2d').createImageData(W, H);
-  const orm = cOrm.getContext('2d').createImageData(W, H);
-  const nor = cNor.getContext('2d').createImageData(W, H);
-  const hgt = new Float32Array(W * H);
-  const bands = [0.13, 0.87];
-  for (let y = 0; y < H; y++) {
-    const v = y / H;
-    for (let x = 0; x < W; x++) {
-      const u = x / W, p = u * PL, k = Math.floor(p), f = p - k, i = y * W + x;
-      const seed = Math.sin(k * 91.7) * 0.5 + 0.5;
-      const grain = Math.sin((v * (7 + seed * 4) + Math.sin(v * 5 + k * 2.3 + f * 2) * 0.35 + f * 0.6) * Math.PI * 2) * 0.5 + 0.5;
-      let r = 118 + seed * 34 - grain * 30, g = 72 + seed * 20 - grain * 20, b = 42 + seed * 10 - grain * 12;
-      let rough = 0.72 + grain * 0.18, metal = 0, h = 0.5 + grain * 0.05;
-      if (f < 0.035 || f > 0.965) { r *= 0.35; g *= 0.35; b *= 0.35; h = 0.1; rough = 0.95; }
-      for (const bv of bands) {
-        const d = Math.abs(v - bv);
-        if (d < 0.05) {
-          const rust = Math.max(0, Math.sin(u * 97 + v * 31) * Math.sin(u * 23) - 0.4);
-          const rv = (u * 24) % 1, rivet = Math.hypot((rv - 0.5) * W / 24, (v - bv) * H) < 6;
-          r = 120 + rust * 160; g = 118 + rust * 50; b = 116 - rust * 40;
-          rough = 0.28 + rust * 0.6; metal = 1 - rust; h = rivet ? 1 : 0.85 - (d > 0.044 ? 0.3 : 0);
-        }
-      }
-      const o = i * 4;
-      col.data.set([r, g, b, 255], o);
-      orm.data.set([255, rough * 255, metal * 255, 255], o);
-      hgt[i] = h;
-    }
-  }
-  for (let y = 0; y < H; y++) {
-    for (let x = 0; x < W; x++) {
-      const at = (xx, yy) => hgt[((yy + H) % H) * W + ((xx + W) % W)];
-      const dx = (at(x + 1, y) - at(x - 1, y)) * 3, dy = (at(x, y + 1) - at(x, y - 1)) * 3;
-      const len = Math.hypot(dx, dy, 1);
-      nor.data.set([(-dx / len * 0.5 + 0.5) * 255, (dy / len * 0.5 + 0.5) * 255, (1 / len * 0.5 + 0.5) * 255, 255], (y * W + x) * 4);
-    }
-  }
-  const tex = (c, data, srgb) => {
-    c.getContext('2d').putImageData(data, 0, 0);
-    const tx = new THREE.CanvasTexture(c);
-    tx.wrapS = THREE.RepeatWrapping;
-    tx.anisotropy = 4;
-    if (srgb) tx.colorSpace = THREE.SRGBColorSpace;
-    return tx;
-  };
-  return { map: tex(cCol, col, true), orm: tex(cOrm, orm, false), normal: tex(cNor, nor, false) };
-}
+const RES = { standard: 512, detailed: 1024, extreme: 2048 };
 
 export default function mount(el, { t }) {
-  const stage = createStage(el, { camPos: [1.65, 1.1, 1.9], target: [0, 0.46, 0] });
-  const { THREE, scene } = stage;
-  const maps = makeMaps(THREE);
+  const stage = createStage(el, { camPos: [1.55, 1.05, 1.75], target: [0, 0.36, 0], bloom: 0.25, exposure: 1.05 });
+  const { THREE, scene, camera, renderer } = stage;
+  renderer.localClippingEnabled = true;
 
-  // Barrel body (lathe profile) + lids with UVs remapped onto a plain plank region.
-  const prof = [];
-  for (let j = 0; j <= 24; j++) {
-    const s = j / 24;
-    prof.push(new THREE.Vector2(0.3 + 0.07 * Math.sin(s * Math.PI), s * 0.92));
-  }
-  const body = new THREE.LatheGeometry(prof, 96);
-  const lid = new THREE.CircleGeometry(0.3, 64).rotateX(-Math.PI / 2);
-  const luv = lid.attributes.uv;
-  for (let i = 0; i < luv.count; i++) luv.setY(i, 0.3 + luv.getY(i) * 0.35);
-  const bottom = lid.clone().rotateX(Math.PI);
-  lid.translate(0, 0.9, 0);
-  bottom.translate(0, 0.005, 0);
-
-  const mats = {
-    bare: new THREE.MeshStandardMaterial({ color: 0xa3a6ad, roughness: 0.85, metalness: 0 }),
-    base: new THREE.MeshStandardMaterial({ map: maps.map, roughness: 0.85, metalness: 0 }),
-    pbr: new THREE.MeshStandardMaterial({
-      map: maps.map, roughnessMap: maps.orm, metalnessMap: maps.orm, normalMap: maps.normal,
-      roughness: 1, metalness: 1, normalScale: new THREE.Vector2(1.2, 1.2),
+  const planeL = new THREE.Plane(), planeR = new THREE.Plane();
+  const M = THREE.MeshStandardMaterial;
+  const set = (planes, defs) => Object.fromEntries(Object.entries(defs).map(([k, v]) => [k, new M({ ...v, clippingPlanes: planes })]));
+  const sets = {
+    bare: set([planeL], {
+      wood: { color: 0x9a9da4, roughness: 0.85 }, iron: { color: 0x8c8f96, roughness: 0.85 },
+      gold: { color: 0xa0a3a9, roughness: 0.85 }, glow: { color: 0x8a8d93, roughness: 0.9 },
+    }),
+    base: set([planeL], {
+      wood: { roughness: 1, metalness: 0 }, iron: { roughness: 1, metalness: 0 },
+      gold: { color: 0xd9a83c, roughness: 1 }, glow: { color: 0xffc46b, roughness: 1 },
+    }),
+    pbr: set([planeL], {
+      wood: { roughness: 1, normalScale: new THREE.Vector2(1.4, 1.4) },
+      iron: { roughness: 1, metalness: 1, envMapIntensity: 1.3 },
+      gold: { color: 0xffc94d, roughness: 0.22, metalness: 1, envMapIntensity: 1.6 },
+      glow: { color: 0x331a00, emissive: 0xffa22e, emissiveIntensity: 1.3 },
+    }),
+    right: set([planeR], {
+      wood: { roughness: 1, normalScale: new THREE.Vector2(1.4, 1.4) },
+      iron: { roughness: 1, metalness: 1, envMapIntensity: 1.3 },
+      gold: { color: 0xffc94d, roughness: 0.22, metalness: 1, envMapIntensity: 1.6 },
+      glow: { color: 0x331a00, emissive: 0xffa22e, emissiveIntensity: 1.3 },
     }),
   };
-  const barrel = new THREE.Group();
-  const parts = [body, lid, bottom].map((g) => {
-    const m = new THREE.Mesh(g, mats.bare);
-    m.castShadow = true; m.receiveShadow = true;
-    barrel.add(m);
-    return m;
-  });
-  scene.add(barrel);
+  const applyMaps = (res) => {
+    const { wood, iron } = getMatTextures(res);
+    sets.base.wood.map = wood.albedo; sets.base.iron.map = iron.albedo;
+    for (const s of [sets.pbr, sets.right]) {
+      Object.assign(s.wood, { map: wood.albedo, roughnessMap: wood.rough, normalMap: wood.normal });
+      Object.assign(s.iron, { map: iron.albedo, roughnessMap: iron.rough, metalnessMap: iron.metal, bumpMap: iron.rough, bumpScale: -0.6 });
+    }
+    Object.values(sets).forEach((s) => Object.values(s).forEach((m) => { m.needsUpdate = true; }));
+  };
 
-  // A slowly orbiting warm light so reflections visibly move across the surface.
-  const orbit = new THREE.PointLight(0xffd2a1, 3.5, 6, 1.5);
-  const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.014, 12, 8), new THREE.MeshBasicMaterial({ color: 0xffd2a1 }));
-  orbit.add(bulb);
-  scene.add(orbit);
+  const left = buildChest(), right = buildChest();
+  scene.add(left.group, right.group);
+  right.setMaterials(sets.right);
+  right.glowLight.visible = false;
+
+  // Warm spotlight orbiting the chest so metal highlights travel while wood stays matte.
+  const spot = new THREE.SpotLight(0xffc98a, 9, 5, 0.5, 0.6, 1.6);
+  spot.castShadow = true;
+  spot.shadow.mapSize.set(1024, 1024);
+  spot.shadow.bias = -0.0005;
+  spot.target.position.set(0, 0.3, 0);
+  const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.018, 16, 10), new THREE.MeshBasicMaterial({ color: 0xffd9a8 }));
+  spot.add(bulb);
+  scene.add(spot, spot.target);
+
+  // Glowing divider drawn in DOM, positioned at the wipe.
+  const divider = document.createElement('div');
+  divider.style.cssText = 'position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;pointer-events:none;'
+    + 'background:linear-gradient(#ffb34700,#ffcf7a 20%,#ffcf7a 80%,#ffb34700);box-shadow:0 0 12px 2px #ffb347aa;';
+  const tag = (txt, side) => {
+    const d = document.createElement('div');
+    d.style.cssText = `position:absolute;top:50%;${side}:8px;font:600 11px/1 system-ui;color:#ffe2b0;letter-spacing:.06em;`
+      + 'background:#0009;padding:4px 7px;border-radius:6px;white-space:nowrap;';
+    d.textContent = txt; divider.appendChild(d); return d;
+  };
+  const tagL = tag('', 'right'), tagR = tag('PBR', 'left');
+  el.appendChild(divider);
 
   const panel = createPanel(el);
-  let stat = () => {};
+  let stat = () => {}, mode = 'base', quality = 'detailed', wipe = 0.5;
+  const names = { bare: t('裸模', 'Bare'), base: t('基础贴图', 'Base colour'), pbr: 'PBR' };
   const copy = {
-    bare: [t('裸模：只有形状，没有颜色——像一块灰色黏土。', 'Bare: shape only, no colour — like grey clay.'), 'texture=false'],
-    base: [t('基础贴图：给表面“刷上颜色”——木纹和铁箍都有了，但木头和金属对光的反应一样，看起来像印在纸上。',
-      'Base colour: the surface is “painted” — wood grain and iron bands appear, but wood and metal react to light the same way, like a printed sticker.'),
-    'texture=true · pbr=false'],
-    pbr: [t('PBR（基于物理的材质）：额外告诉引擎每一处有多粗糙、是不是金属、有多少凹凸。于是铁箍会反光，木头保持哑光，缝隙有阴影——在任何灯光下都像真的。',
-      'PBR (physically based rendering): the model also says how rough, how metallic and how bumpy every spot is. Iron bands now shine, wood stays matte and gaps catch shadows — it looks real under any lighting.'),
-    'texture=true · pbr=true'],
+    bare: [t('裸模：只有形状，没有颜色，像一块灰色黏土。拖动下方滑块和右边的 PBR 对比。', 'Bare: shape only, no colour, like grey clay. Drag the wipe to compare with PBR on the right.'), 'texture=false'],
+    base: [t('基础贴图：表面“刷上颜色”，木纹和铁件都有了，但木头和金属对光的反应一样，像印在纸上。', 'Base colour: the surface is “painted” with grain and iron, but wood and metal react to light the same way, like a printed sticker.'), 'texture=true · pbr=false'],
+    pbr: [t('PBR：还告诉引擎每处多粗糙、是不是金属、有多少凹凸。铁件和金币会反光，木头保持哑光，缝隙有阴影。', 'PBR: the model also says how rough, how metallic and how bumpy every spot is. Iron and coins shine, wood stays matte, seams catch shadow.'), 'texture=true · pbr=true'],
   };
-  const setMode = (mode) => {
-    parts.forEach((m) => { m.material = mats[mode]; });
+  const refresh = () => {
+    left.setMaterials(sets[mode]);
     panel.caption(copy[mode][0]);
-    stat(copy[mode][1]);
+    tagL.textContent = names[mode];
+    stat(`${copy[mode][1]} · texture_quality=${quality} · ${RES[quality]}px`);
   };
-  panel.buttons(t('材质', 'Material'), [['bare', t('裸模', 'Bare')], ['base', t('基础贴图', 'Base colour')], ['pbr', 'PBR']], 'pbr', setMode);
+  panel.buttons(t('材质', 'Material'), [['bare', names.bare], ['base', names.base], ['pbr', 'PBR']], mode, (v) => { mode = v; refresh(); });
+  panel.buttons('texture_quality', [['standard', 'standard'], ['detailed', 'detailed'], ['extreme', 'extreme']], quality, (v) => {
+    quality = v; applyMaps(RES[v]); refresh();
+  });
+  panel.slider(t('对比', 'Wipe'), { min: 0, max: 100, step: 1, value: 50 }, (v) => { wipe = v / 100; });
   stat = panel.stat();
-  setMode('pbr');
+  applyMaps(RES[quality]);
+  refresh();
 
+  // Screen-space split: a world plane through the camera that projects to a vertical line at x=wipe.
+  const ndc = new THREE.Vector3(), dir = new THREE.Vector3(), up = new THREE.Vector3(), n = new THREE.Vector3();
   stage.onFrame((dt, time) => {
-    barrel.rotation.y += dt * 0.15;
-    orbit.position.set(Math.cos(time * 0.6) * 1.1, 0.95 + Math.sin(time * 0.4) * 0.25, Math.sin(time * 0.6) * 1.1);
+    ndc.set(wipe * 2 - 1, 0, 0.5).unproject(camera);
+    dir.copy(ndc).sub(camera.position).normalize();
+    up.set(0, 1, 0).applyQuaternion(camera.quaternion);
+    n.crossVectors(up, dir).normalize();
+    planeL.setFromNormalAndCoplanarPoint(n, camera.position);
+    planeR.copy(planeL).negate();
+    divider.style.left = `${wipe * 100}%`;
+    divider.style.opacity = mode === 'pbr' || wipe <= 0.005 || wipe >= 0.995 ? '0' : '1';
+
+    spot.position.set(Math.cos(time * 0.45) * 1.25, 1.05 + Math.sin(time * 0.3) * 0.2, Math.sin(time * 0.45) * 1.25);
+    const lidA = -0.42 - Math.sin(time * 0.8) * 0.03;
+    left.lid.rotation.x = right.lid.rotation.x = lidA;
+    const g = 0.8 + Math.sin(time * 3.1) * 0.15 + Math.sin(time * 7.3) * 0.08;
+    left.glowLight.intensity = right.glowLight.intensity = mode === 'bare' ? g * 0.3 : g;
   });
 
   return {
     dispose() {
-      Object.values(mats).forEach((m) => m.dispose());
-      Object.values(maps).forEach((tx) => tx.dispose());
-      stage.dispose();
+      Object.values(sets).forEach((s) => Object.values(s).forEach((m) => m.dispose()));
+      left.dispose(); right.dispose();
+      disposeMatTextures();
+      divider.remove();
       panel.dispose();
+      stage.dispose();
     },
   };
 }

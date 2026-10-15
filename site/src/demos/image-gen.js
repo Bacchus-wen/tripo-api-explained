@@ -1,185 +1,235 @@
-// 文生图 / 图生图 — real images generated for this project: one concept, then props isolated from it.
+// 文生图 / 图生图 — cinematic explainer built from the real images made for this site:
+// a prompt is typed → the concept develops → four props are boxed and fly out into
+// image-to-image reference cards (input = the concept's task_id) → on to image-to-3D.
+import { createPanel } from './_stage.js';
+import { IG_CSS } from './lib/info-imagegen-css.js';
+import { createModelSheet } from './lib/info-imagegen-models.js';
+import { createZoom } from './lib/info-zoom.js';
+import { createClock, createBag, injectStyle, h, preload, relRect, svgEl, prefersReduced, ease } from './lib/info-motion.js';
+
+const CONCEPT = 'workshop-concept-v2';
+const TASK = '0d626fb5';
+const PROMPT = 'Stylized 3D miniature diorama of an "AI 3D asset production workshop" on a warm-wood tabletop, 3/4 isometric camera, soft warm key light… four machines on a conveyor: generator, workbench, camera pedestal, shelf --no text, logos, people';
+// [file, zh, en, box on the concept as x, y, w, h fractions]
 const PROPS = [
-  ['prop-printer-ref-v1', '生成机', 'Generator'],
-  ['prop-workbench-ref-v1', '修整工作台', 'Workbench'],
-  ['prop-critic-ref-v1', '多机位展台', 'Camera stand'],
-  ['prop-shelf-ref-v1', '成品货架', 'Shelf'],
+  ['prop-printer-ref-v1', '生成机', 'Generator', [0.04, 0.145, 0.21, 0.32]],
+  ['prop-workbench-ref-v1', '修整工作台', 'Workbench', [0.285, 0.25, 0.19, 0.31]],
+  ['prop-critic-ref-v1', '多机位展台', 'Camera stand', [0.515, 0.265, 0.2, 0.37]],
+  ['prop-shelf-ref-v1', '成品货架', 'Shelf', [0.77, 0.195, 0.215, 0.49]],
 ];
-const MODELS = [
-  ['Seedream', [['seedream_v4', '默认模型：不指定时就用它', 'The default when you don’t pick one'],
-    ['seedream_v5', 'Seedream 系列的较新版本', 'A newer version of the Seedream family']]],
-  ['Banana', [['banana', 'Banana 系列基础款', 'Base model of the Banana family'],
-    ['banana_pro', 'Banana 系列的 Pro 档', 'Pro tier of the Banana family'],
-    ['banana2', 'Banana 系列第二代', 'Second generation of the Banana family']]],
-  ['Chat Image', [['chat_image_2', 'Chat Image 系列', 'The Chat Image family'],
-    ['chat_image_2.5_flare', '本站所用：概念图和全部道具都由它生成', 'Used here: made the concept and every prop'],
-    ['chat_image_2.5_sunburst', 'Chat Image 2.5 的另一个变体', 'Another variant of Chat Image 2.5']]],
-];
-const CSS = `
-.d-imagegen{position:absolute;inset:0;display:flex;flex-direction:column;gap:10px;padding:14px 16px;box-sizing:border-box;color:#e8e6e1;font-size:13px}
-.d-imagegen .ig-main{flex:1;min-height:0;display:grid;grid-template-columns:1.45fr 64px 1fr;gap:0}
-.d-imagegen .ig-col{display:flex;flex-direction:column;min-height:0;gap:6px}
-.d-imagegen .ig-tag{font-size:12px;color:#9aa0ad;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.d-imagegen .ig-tag b{color:#ffb347;font-weight:600;margin-right:6px}
-.d-imagegen .ig-concept{flex:1;min-height:0;position:relative;display:flex;align-items:center;justify-content:center}
-.d-imagegen .ig-concept img{max-width:100%;max-height:100%;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.45);opacity:0;transform:scale(.97);transition:opacity .7s,transform .7s}
-.d-imagegen .ig-concept img.in{opacity:1;transform:none}
-.d-imagegen .ig-facts{display:flex;flex-wrap:wrap;gap:5px}
-.d-imagegen .ig-facts span{background:#22252c;border:1px solid #2f333c;border-radius:20px;padding:1px 8px;font-size:11.5px;color:#cfd2d8;font-variant-numeric:tabular-nums}
-.d-imagegen .ig-props{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(0,1fr);gap:8px}
-.d-imagegen .ig-card{position:relative;min-height:0;display:flex;flex-direction:column;background:#1d2026;border:1px solid #2f333c;border-radius:10px;overflow:hidden;opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s}
-.d-imagegen .ig-card.in{opacity:1;transform:none}
-.d-imagegen .ig-card img{flex:1;min-height:0;width:100%;object-fit:cover;display:block;background:#2a2d33}
-.d-imagegen .ig-card div{padding:4px 8px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.d-imagegen .ig-tag code{font-size:11px;color:#3fa7a0}
-.d-imagegen .ig-empty{grid-column:1/-1;grid-row:1/-1;display:flex;align-items:center;justify-content:center;text-align:center;border:1px dashed #3a3f4a;border-radius:10px;color:#9aa0ad;padding:16px;line-height:1.6}
-.d-imagegen svg.ig-links{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
-.d-imagegen .ig-links path{fill:none;stroke:#ffb347;stroke-width:1.6;stroke-dasharray:5 5;opacity:.8;animation:igflow 1.2s linear infinite}
-@keyframes igflow{to{stroke-dashoffset:-20}}
-.d-imagegen .ig-cap{line-height:1.6;color:#d8d6d1}
-.d-imagegen .ig-cap code{background:#22252c;border-radius:4px;padding:0 4px;color:#ffb347;font-size:12px}
-.d-imagegen .ig-models{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px}
-.d-imagegen .ig-fam{display:flex;align-items:center;gap:4px}
-.d-imagegen .ig-fam>span{font-size:11px;color:#7d8698;margin-right:2px}
-.d-imagegen .ig-chip{font:11.5px ui-monospace,Menlo,monospace;background:#1d2026;color:#cfd2d8;border:1px solid #333844;border-radius:6px;padding:2px 7px;cursor:pointer}
-.d-imagegen .ig-chip.used{border-color:#e07a3f;color:#ffb347}
-.d-imagegen .ig-chip.on{background:#e07a3f;color:#15171c;border-color:#e07a3f}
-.d-imagegen .ig-desc{font-size:12px;color:#9aa0ad;min-height:1.4em}
-.d-imagegen .ig-desc b{color:#e8e6e1;font-weight:600;font-family:ui-monospace,Menlo,monospace;margin-right:6px}
-`;
+const bez = (a, b, c, d, k) => (1 - k) ** 3 * a + 3 * (1 - k) ** 2 * k * b + 3 * (1 - k) * k * k * c + k ** 3 * d;
 
 export default function mount(el, { t, base }) {
-  el.classList.add('d-imagegen');
-  const timers = [];
-  const style = document.createElement('style');
-  style.textContent = CSS;
-  el.appendChild(style);
+  el.classList.add('d-ig');
+  injectStyle(el, IG_CSS);
+  const clock = createClock();
+  const bag = createBag();
+  const panel = createPanel(el);
+  const zoom = createZoom(el);
+  const sheet = createModelSheet(el, t);
+  const src = (n) => `${base}images/${n}.png`;
 
-  const main = document.createElement('div');
-  main.className = 'ig-main';
-  main.innerHTML = `
-    <div class="ig-col">
-      <div class="ig-tag"><b>①</b>${t('文生图 · 一句话 → 整个场景的概念图', 'Text-to-image · one prompt → whole-scene concept')}</div>
-      <div class="ig-concept"><img alt=""></div>
-      <div class="ig-facts">
-        <span>chat_image_2.5_flare</span><span>1536×1024</span><span>quality: medium</span>
-        <span>${t('约 25 秒', '~25 s')}</span><span>${t('10 积分', '10 credits')}</span>
-      </div>
-    </div>
-    <div></div>
-    <div class="ig-col">
-      <div class="ig-tag"><b>②</b>${t('图生图 · 逐个抠出道具', 'Image-to-image · one prop each')} · <code>input = task_id</code></div>
-      <div class="ig-props"></div>
-    </div>`;
-  el.appendChild(main);
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('class', 'ig-links');
-  el.appendChild(svg);
+  // ---- layout ----
+  const head1 = h('div.ig-head', {}, `<b>1</b><span>${t('文生图', 'Text-to-image')} · <code>POST /generation/text-to-image</code></span>`);
+  const prompt = h('div.ig-prompt');
+  const img = h('img', { alt: t('文生图生成的车间概念图', 'Workshop concept from text-to-image') });
+  const noise = h('canvas', { width: 120, height: 80 });
+  const scan = h('div.ig-scan');
+  const status = h('div.ig-status');
+  const frame = h('div.ig-frame', {}, [img, noise, scan, status]);
+  const facts = h('div.ig-facts');
+  [['chat_image_2.5_flare', 1], ['1536×1024'], ['quality: medium'], [t('约 25 秒', '~25 s')], ['10 credits', 1]].forEach(([s, hl]) =>
+    facts.append(h(`span${hl ? '.hl' : ''}`, { text: s })));
+  const left = h('div.ig-col', {}, [head1, prompt, h('div.ig-stagewrap', {}, [frame]), facts]);
+  const head2 = h('div.ig-head', {}, `<b>2</b><span>${t('图生图', 'Image-to-image')} · <code>input = ${t('上一个任务的 task_id', 'the previous task_id')}</code></span>`);
+  const grid = h('div.ig-cards');
+  const right = h('div.ig-col', {}, [head2, grid]);
+  const main = h('div.ig-main', {}, [left, right]);
+  const svg = svgEl('svg', { class: 'ig-links' });
+  const to3d = h('div.ig-to3d', {}, `<span class="arr">→</span><b>${t('图生 3D', 'Image-to-3D')}</b><small>${t('每张参考图 → 一个模型', 'one reference → one model')}</small>`);
+  el.append(main, svg, to3d);
 
-  const cap = document.createElement('div');
-  cap.className = 'ig-cap';
-  cap.innerHTML = t(
-    '① 文生图先画出整个车间的概念图。② 图生图直接把上一个任务的 <code>task_id</code> 当作 <code>input</code>，每次只抠出一个道具——同一张源图，所以所有道具风格统一。③ 这些参考图接着交给「图生模型」，变成 3D。',
-    '① Text-to-image paints the whole workshop concept. ② Image-to-image passes the previous task’s <code>task_id</code> straight in as <code>input</code> and isolates one prop at a time — same source, so every prop shares one style. ③ These references then feed image-to-model to become 3D.');
-  el.appendChild(cap);
-
-  const models = document.createElement('div');
-  models.className = 'ig-models';
-  const desc = document.createElement('div');
-  desc.className = 'ig-desc';
-  const chips = [];
-  const pick = (id, zh, en) => {
-    chips.forEach((c) => c.classList.toggle('on', c.dataset.id === id));
-    desc.innerHTML = `<b>${id}</b>${t(zh, en)}`;
+  const panelEl = el.querySelector('.demo-panel');
+  const replayBtn = h('button', { type: 'button', text: `↻ ${t('重播', 'Replay')}` });
+  const modelBtn = h('button', { type: 'button', text: `${t('模型', 'Models')} · 8` });
+  const steps = h('div.ig-steps', {}, '<i></i><i></i><i></i>');
+  panelEl.append(h('div.demo-row', {}, [h('div.demo-seg', {}, [replayBtn, modelBtn]), steps]));
+  const setStep = (n, zh, en) => {
+    [...steps.children].forEach((d, i) => d.classList.toggle('on', i < n));
+    head1.classList.toggle('on', n >= 1);
+    head2.classList.toggle('on', n >= 2);
+    panel.caption(t(zh, en));
   };
-  MODELS.forEach(([fam, list]) => {
-    const g = document.createElement('div');
-    g.className = 'ig-fam';
-    g.innerHTML = `<span>${fam}</span>`;
-    list.forEach(([id, zh, en]) => {
-      const c = document.createElement('button');
-      c.className = 'ig-chip' + (id === 'chat_image_2.5_flare' ? ' used' : '');
-      c.dataset.id = id;
-      c.textContent = id === 'chat_image_2.5_flare' ? `★ ${id}` : id;
-      c.title = t(zh, en);
-      c.addEventListener('click', () => pick(id, zh, en));
-      c.addEventListener('mouseenter', () => pick(id, zh, en));
-      chips.push(c);
-      g.appendChild(c);
-    });
-    models.appendChild(g);
-  });
-  const modelLabel = document.createElement('div');
-  modelLabel.className = 'ig-tag';
-  modelLabel.textContent = t('可选模型（点一下看说明）', 'Available models (tap one for a note)');
-  el.append(modelLabel, models, desc);
-  pick('chat_image_2.5_flare', MODELS[2][1][1][1], MODELS[2][1][1][2]);
 
-  // Concept image
-  const conceptImg = main.querySelector('.ig-concept img');
-  conceptImg.alt = t('文生图生成的车间概念图', 'Workshop concept from text-to-image');
-  conceptImg.addEventListener('load', () => { conceptImg.classList.add('in'); drawLinks(); });
-  conceptImg.addEventListener('error', () => { conceptImg.style.display = 'none'; });
-  conceptImg.src = `${base}images/workshop-concept-v2.png`;
-
-  // Prop cards: hide any that fail to load.
-  const grid = main.querySelector('.ig-props');
-  const cards = [];
-  let settled = 0;
-  const settle = () => {
-    settled += 1;
-    if (settled < PROPS.length) return;
-    const ok = cards.filter((c) => c.isConnected);
-    if (!ok.length) {
-      const empty = document.createElement('div');
-      empty.className = 'ig-empty';
-      empty.textContent = t('道具参考图还在生成中，稍后会出现在这里。', 'Prop references are still being generated — they will appear here.');
-      grid.appendChild(empty);
-    }
-    ok.forEach((c, i) => timers.push(setTimeout(() => { c.classList.add('in'); drawLinks(); }, 500 + i * 220)));
-    if (ok.length && ok.length <= 2) grid.style.gridTemplateColumns = '1fr';
-    drawLinks();
+  // ---- state ----
+  let cards = []; // { el, thumb, ref, box, name, zh, en }
+  let conceptOk = false;
+  let developing = false;
+  const nctx = noise.getContext('2d');
+  const nData = nctx.createImageData(120, 80);
+  const drawNoise = () => {
+    const d = nData.data;
+    for (let i = 0; i < d.length; i += 4) { const v = Math.random() * 255; d[i] = v; d[i + 1] = v * 0.82; d[i + 2] = v * 0.6; d[i + 3] = 255; }
+    nctx.putImageData(nData, 0, 0);
   };
-  PROPS.forEach(([name, zh, en]) => {
-    const card = document.createElement('div');
-    card.className = 'ig-card';
-    const img = document.createElement('img');
-    img.alt = t(zh, en);
-    card.appendChild(img);
-    const lab = document.createElement('div');
-    lab.textContent = t(zh, en);
-    card.appendChild(lab);
-    grid.appendChild(card);
-    cards.push(card);
-    img.addEventListener('load', settle, { once: true });
-    img.addEventListener('error', () => { card.remove(); settle(); }, { once: true });
-    img.src = `${base}images/${name}.png`;
-  });
+  clock.onFrame(() => { if (developing) drawNoise(); });
 
-  // Dashed arrows from the concept's right edge to each visible card.
-  function drawLinks() {
-    const r0 = el.getBoundingClientRect();
-    const ir = conceptImg.getBoundingClientRect();
-    const shown = cards.filter((c) => c.isConnected && c.classList.contains('in'));
-    if (!ir.width) { svg.innerHTML = ''; return; }
-    const x0 = ir.right - r0.left + 4, y0 = ir.top + ir.height / 2 - r0.top;
-    const paths = shown.map((c) => {
-      const cr = c.getBoundingClientRect();
-      const x1 = cr.left - r0.left - 6, y1 = cr.top + cr.height / 2 - r0.top;
-      const mx = (x0 + x1) / 2;
-      return `<path d="M${x0},${y0} C${mx},${y0} ${mx},${y1} ${x1},${y1}" marker-end="url(#igArrow)"/>`;
-    });
-    svg.innerHTML = `<defs><marker id="igArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M0,0 L10,5 L0,10 z" style="fill:#ffb347;stroke:none;animation:none"/></marker></defs>${paths.join('')}`;
+  const typeTo = (k) => {
+    const n = Math.round(PROMPT.length * k);
+    prompt.innerHTML = `<i>prompt:</i> ${PROMPT.slice(0, n).replace(/</g, '&lt;')}${k < 1 ? '<span class="caret"></span>' : ''}`;
+  };
+  const develop = (k) => {
+    img.style.opacity = Math.min(1, k * 3);
+    img.style.filter = `blur(${22 * (1 - k)}px) saturate(${0.2 + 0.8 * k}) brightness(${0.7 + 0.3 * k})`;
+    img.style.transform = `scale(${1.08 - 0.08 * k})`;
+    noise.style.opacity = 0.75 * (1 - k);
+    scan.style.opacity = k < 1 ? 1 : 0;
+    scan.style.top = `${k * 100}%`;
+  };
+  const setStatus = (ok) => {
+    status.className = `ig-status${ok ? ' ok' : ''}`;
+    status.innerHTML = ok ? `<i></i>success · task ${TASK}…` : `<i></i>running · ${t('约 25 秒', '~25 s')}`;
+    status.style.opacity = 1;
+  };
+  const geom = (c) => {
+    const b = relRect(c.box, el), r = relRect(c.thumb, el);
+    const x0 = b.x + b.w, y0 = b.cy, x1 = r.x - 6, y1 = r.cy;
+    const dx = Math.max(40, x1 - x0);
+    return { b, r, p: [x0, y0, x0 + dx * 0.55, y0, x1 - dx * 0.4, y1, x1, y1] };
+  };
+  const pathD = ({ p }) => `M${p[0]},${p[1]} C${p[2]},${p[3]} ${p[4]},${p[5]} ${p[6]},${p[7]}`;
+  const redrawLinks = () => {
+    svg.querySelectorAll('path.flow').forEach((n) => n.remove());
+    cards.filter((c) => c.el.classList.contains('got') && conceptOk).forEach((c) =>
+      svg.append(svgEl('path', { class: 'flow', d: pathD(geom(c)) })));
+  };
+
+  function reset() {
+    clock.clear();
+    developing = false;
+    svg.innerHTML = '';
+    el.querySelectorAll('.ig-ghost').forEach((n) => n.remove());
+    typeTo(0);
+    [...facts.children].forEach((s) => s.classList.remove('in'));
+    develop(0);
+    status.style.opacity = 0;
+    cards.forEach((c) => { c.el.classList.remove('got'); c.box.classList.remove('in'); c.rect.style.strokeDashoffset = 1; });
+    to3d.classList.remove('in');
   }
-  const ro = new ResizeObserver(drawLinks);
+  function finalState() {
+    reset();
+    typeTo(1);
+    [...facts.children].forEach((s) => s.classList.add('in'));
+    develop(1);
+    setStatus(true);
+    cards.forEach((c) => { c.el.classList.add('got'); c.box.classList.add('in'); c.rect.style.strokeDashoffset = 0; });
+    to3d.classList.add('in');
+    setStep(3, '文生图出概念图 → 图生图用它的 task_id 逐个抠出道具 → 交给图生 3D。点任意图片可放大。',
+      'Text-to-image makes the concept → image-to-image reuses its task_id to isolate each prop → on to image-to-3D. Click any image to zoom.');
+    redrawLinks();
+  }
+  function fly(c, at) {
+    clock.at(at, () => { c.box.classList.add('in'); });
+    clock.tween(at, 320, (k) => { c.rect.style.strokeDashoffset = 1 - k; });
+    const path = svgEl('path');
+    let g = null, ghost = null, len = 1;
+    clock.at(at + 300, () => {
+      g = geom(c);
+      path.setAttribute('d', pathD(g));
+      svg.append(path);
+      len = path.getTotalLength();
+      path.style.strokeDasharray = `${len} ${len}`;
+      path.style.strokeDashoffset = len;
+      const [x, y, w, hh] = c.frac;
+      ghost = h('div.ig-ghost', { style: {
+        left: `${g.b.x}px`, top: `${g.b.y}px`, width: `${g.b.w}px`, height: `${g.b.h}px`, backgroundImage: `url(${src(CONCEPT)})`,
+        backgroundSize: `${100 / w}% ${100 / hh}%`, backgroundPosition: `${(x / (1 - w)) * 100}% ${(y / (1 - hh)) * 100}%` } });
+      el.append(ghost);
+    });
+    clock.tween(at + 320, 760, (k) => {
+      if (!ghost) return;
+      path.style.strokeDashoffset = len * (1 - Math.min(1, k * 1.3));
+      const { b, r, p } = g;
+      const s = Math.min(r.w / b.w, r.h / b.h) * 0.92;
+      const cx = bez(p[0] - b.w / 2, p[2], p[4], r.cx, k), cy = bez(p[1], p[3], p[5], r.cy, k);
+      const sc = 1 + (s - 1) * k;
+      Object.assign(ghost.style, { left: `${cx - (b.w * sc) / 2}px`, top: `${cy - (b.h * sc) / 2}px`, width: `${b.w * sc}px`, height: `${b.h * sc}px` });
+    }, ease.inOut);
+    clock.at(at + 1100, () => {
+      c.el.classList.add('got');
+      ghost?.animate?.([{ opacity: 1 }, { opacity: 0 }], { duration: 380, fill: 'forwards' });
+      path.classList.add('flow');
+      path.style.strokeDasharray = '';
+      path.style.strokeDashoffset = '';
+    });
+    clock.at(at + 1500, () => ghost?.remove());
+  }
+  function play() {
+    sheet.toggle(false);
+    if (prefersReduced()) { finalState(); return; }
+    reset();
+    setStep(1, '① 文生图：一句提示词 → 整个车间的概念图', '① Text-to-image: one prompt → the whole workshop concept');
+    clock.tween(0, 1500, (k) => typeTo(k), (k) => k);
+    [...facts.children].forEach((s, i) => clock.at(1500 + i * 90, () => s.classList.add('in')));
+    clock.at(1650, () => { if (conceptOk) { setStatus(false); developing = true; } });
+    clock.tween(1700, 2300, (k) => develop(k), ease.inOut);
+    clock.at(4000, () => { developing = false; if (conceptOk) setStatus(true); });
+    const t2 = 4500;
+    clock.at(t2, () => setStep(2, `② 图生图：把概念图的 task_id（${TASK}…）当 input，每次只抠出一个道具——同一张源图，风格天然统一`,
+      `② Image-to-image: the concept's task_id (${TASK}…) goes in as input, one prop per call — one source, so every prop shares the look`));
+    cards.forEach((c, i) => (conceptOk ? fly(c, t2 + 400 + i * 650) : clock.at(t2 + 400 + i * 300, () => c.el.classList.add('got'))));
+    clock.at(t2 + 600 + cards.length * 650 + 700, () => {
+      to3d.classList.add('in');
+      setStep(3, '③ 干净的单物体参考图 → 交给「图生 3D」变成模型。点任意图片可放大。', '③ Clean single-object references → image-to-3D turns each into a model. Click any image to zoom.');
+    });
+  }
+
+  // ---- interactions ----
+  bag.on(replayBtn, 'click', play);
+  bag.on(modelBtn, 'click', (e) => { e.stopPropagation(); sheet.toggle(); });
+  bag.on(el, 'click', (e) => { if (sheet.open && !sheet.contains(e.target) && e.target !== modelBtn) sheet.toggle(false); });
+  bag.on(frame, 'click', () => conceptOk && zoom.open(src(CONCEPT), frame, `${t('文生图概念图', 'Text-to-image concept')} · <code>chat_image_2.5_flare · 1536×1024 · task ${TASK}…</code>`));
+  const ro = new ResizeObserver(() => redrawLinks());
   ro.observe(el);
+  bag.add(() => ro.disconnect());
+
+  // ---- load: only request files listed in index.json, so missing images never 404 ----
+  let alive = true;
+  const listed = fetch(`${base}index.json`).then((r) => (r.ok ? r.json() : null)).then((d) => d?.images || null).catch(() => null);
+  listed.then(async (names) => {
+    const want = (n) => !names || names.includes(n);
+    const [cImg, ...pImgs] = await Promise.all([CONCEPT, ...PROPS.map((p) => p[0])].map((n) => (want(n) ? preload(src(n)) : null)));
+    if (!alive) return;
+    conceptOk = !!cImg;
+    if (conceptOk) img.src = cImg.src;
+    else frame.append(h('div.ig-empty', { text: t('概念图还没生成', 'Concept image not generated yet') }));
+    PROPS.forEach(([name, zh, en, frac], i) => {
+      if (!pImgs[i]) return;
+      const box = h('div.ig-box', { style: { left: `${frac[0] * 100}%`, top: `${frac[1] * 100}%`, width: `${frac[2] * 100}%`, height: `${frac[3] * 100}%` } },
+        `<svg viewBox="0 0 100 100" preserveAspectRatio="none"><rect x="1" y="1" width="98" height="98" rx="4" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="1"/></svg><em>${t(zh, en)}</em>`);
+      if (conceptOk) frame.append(box);
+      const ref = h('img', { alt: t(zh, en), src: pImgs[i].src });
+      const thumb = h('div.ig-thumb', {}, [ref]);
+      const card = h('div.ig-card', {}, [thumb, h('div.ig-lab', {}, `<span>${t(zh, en)}</span><code>← ${TASK}</code>`)]);
+      grid.append(card);
+      const c = { el: card, thumb, box, rect: box.querySelector('rect'), frac };
+      bag.on(card, 'click', () => zoom.open(ref.src, ref, `${t('图生图 · 从概念图中只抠出', 'Image-to-image · isolated from the concept:')} ${t(zh, en)} · <code>input = task ${TASK}…</code>`));
+      cards.push(c);
+    });
+    if (!cards.length) grid.append(h('div.ig-empty', { style: { position: 'relative' }, text: t('道具参考图还在生成中，稍后会出现在这里。', 'Prop references are still being generated — they will appear here.') }));
+    if (cards.length && cards.length <= 2) grid.classList.add('one');
+    play();
+  });
 
   return {
     dispose() {
-      timers.forEach(clearTimeout);
-      ro.disconnect();
-      el.classList.remove('d-imagegen');
+      alive = false;
+      clock.dispose();
+      bag.dispose();
+      zoom.dispose();
+      sheet.dispose();
+      panel.dispose();
+      el.classList.remove('d-ig');
       el.innerHTML = '';
     },
   };
