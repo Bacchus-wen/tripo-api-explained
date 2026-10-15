@@ -3,13 +3,14 @@ import api from './data/tripo-api.json';
 import { renderRun } from './views/run.js';
 import { renderModules } from './views/modules.js';
 import { renderTeam } from './views/team.js';
+import { renderHome } from './views/home.js';
 
 const demos = import.meta.glob('./demos/[!_]*.js');
 const BASE = `${import.meta.env.BASE_URL}data/`;
 
 const state = {
   lang: localStorage.getItem('lang') || 'zh',
-  view: location.hash.replace('#', '') || 'hall',
+  view: location.hash.replace('#', '') || 'home',
   feature: api.features.some((f) => f.id === localStorage.getItem('feature')) ? localStorage.getItem('feature') : api.features[0].id,
   data: null,
 };
@@ -30,13 +31,13 @@ let cleanupView = null;
 function shell() {
   app.innerHTML = `
     <header class="top">
-      <div class="brand">
+      <a class="brand" href="#home">
         <span class="brand-mark"></span>
         <div>
           <strong>${t('Tripo API 图解', 'Tripo API, Explained')}</strong>
           <small>${t('看得见、摸得着的 3D 生成接口', 'The 3D generation API you can see and touch')}</small>
         </div>
-      </div>
+      </a>
       <nav class="tabs">
         ${[['hall', '能力馆', 'Feature Hall'], ['team', 'Astra 分工', 'Astra roles'], ['run', '真实流程', 'Real Run'], ['modules', '产线模块', 'Pipeline']]
           .map(([id, zh, en]) => `<a href="#${id}" class="${state.view === id ? 'on' : ''}">${t(zh, en)}</a>`).join('')}
@@ -98,7 +99,11 @@ function card(f) {
 
 async function showFeature() {
   const f = api.features.find((x) => x.id === state.feature);
-  document.getElementById('card').innerHTML = card(f);
+  const cardEl = document.getElementById('card');
+  cardEl.innerHTML = card(f);
+  cardEl.style.animation = 'none';
+  void cardEl.offsetWidth;
+  cardEl.style.animation = '';
   const el = document.getElementById('stage');
   mounted?.dispose();
   mounted = null;
@@ -130,12 +135,13 @@ async function render() {
   if (state.view === 'hall') return hall(view);
   state.data ??= await fetch(`${BASE}index.json`).then((r) => r.json()).catch(() => ({ modules: [], runs: [], images: [] }));
   const ctx = { lang: state.lang, t, L, base: BASE, data: state.data, statusChip };
-  const views = { run: renderRun, team: renderTeam, modules: renderModules };
+  const views = { home: renderHome, run: renderRun, team: renderTeam, modules: renderModules };
   cleanupView = (views[state.view] || renderModules)(view, ctx);
 }
 
 window.addEventListener('hashchange', () => {
-  state.view = location.hash.replace('#', '') || 'hall';
+  state.view = location.hash.replace('#', '') || 'home';
+  window.scrollTo(0, 0);
   render();
 });
 document.documentElement.lang = state.lang === 'zh' ? 'zh-CN' : 'en';

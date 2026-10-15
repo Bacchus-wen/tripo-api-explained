@@ -30,7 +30,7 @@ API base: https://openapi.tripo3d.ai/v3
 - [Web three.js](/docs/modules/web-threejs.md) [apps, live]: Loads glb directly in the browser. The site you are looking at is this module's output.
 - [Unreal Engine Scene](/docs/modules/ue-scene.md) [apps, planned]: Builds Unreal scenes from library assets via Epic's Unreal MCP.
 - [TouchDesigner FX](/docs/modules/td-fx.md) [apps, planned]: Brings assets into real-time visuals via TouchDesigner MCP.
-- [Promo Video](/docs/modules/promo-video.md) [apps, planned]: An LLM writes the script and storyboard; Seedance generates a promo clip referencing the showcase renders.
+- [Promo Video](/docs/modules/promo-video.md) [apps, planned]: Astra writes the script and storyboard; Seedance generates a promo clip referencing the showcase renders.
 - [Ambient Audio](/docs/modules/ambient-audio.md) [apps, planned]: ElevenLabs generates ambience and sound effects for showcase videos and web scenes.
 
 ## Real runs

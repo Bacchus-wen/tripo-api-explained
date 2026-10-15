@@ -2,7 +2,7 @@
 
 - layer: process
 - status: live
-- tools: inspect_asset.py (Grok)
+- tools: inspect_asset.py
 
 Read-only checks on the raw glb: meshes, triangle count, UVs, materials and textures. A structural report does not replace art or Blender checks.
 

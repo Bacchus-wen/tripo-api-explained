@@ -2,7 +2,7 @@
 
 - layer: process
 - status: live
-- tools: Blender four-view renders, Claude critic sub-agent
+- tools: Blender four-view renders, Astra review session
 
 Renders overview, close-up, low-angle and wireframe views; an independent critic lists at least three concrete flaws and scores the scene, routing failures back to the right step.
 

@@ -1,6 +1,6 @@
 import collab from '../data/collab.json';
 import { createStage } from '../demos/_stage.js';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { loadScene } from './scene-loader.js';
 
 export function renderTeam(view, { t, L, base, data }) {
   const role = Object.fromEntries(collab.roles.map((r) => [r.id, r]));
@@ -42,24 +42,7 @@ export function renderTeam(view, { t, L, base, data }) {
   let scale = 1, offset = new THREE.Vector3();
   const toWorld = ([x, y, z]) => new THREE.Vector3(x, y, z).multiplyScalar(scale).add(offset);
   if (run?.scene?.model) {
-    new GLTFLoader().load(`${base}${run.scene.model}`, (g) => {
-      const root = g.scene;
-      const box = new THREE.Box3().setFromObject(root);
-      const size = box.getSize(new THREE.Vector3());
-      scale = 1.8 / Math.max(size.x, size.z);
-      root.scale.setScalar(scale);
-      const c = box.getCenter(new THREE.Vector3()).multiplyScalar(scale);
-      offset = new THREE.Vector3(-c.x, -box.min.y * scale, -c.z);
-      root.position.copy(offset);
-      root.traverse((o) => {
-        if (!o.isMesh) return;
-        o.castShadow = o.receiveShadow = true;
-        const name = o.material?.name || '';
-        if (name.startsWith('wood')) o.material.color.set(0x7a3f1c);
-        if (name.startsWith('glow')) o.material.emissive.set(0xff6a00);
-      });
-      stage.scene.add(root);
-    });
+    loadScene(stage, `${base}${run.scene.model}`, { onLoad: (r) => { scale = r.scale; offset = r.offset; } });
   }
 
   // camera fly-to

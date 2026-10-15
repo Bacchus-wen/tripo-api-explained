@@ -2,7 +2,7 @@
 
 - layer: create
 - status: live
-- tools: Claude Code
+- tools: Astra
 
 Turns a one-line request into an asset list in a single order JSON: objects, style, references, real-world size, face budget, targets and budget. Every downstream step follows the order.
 

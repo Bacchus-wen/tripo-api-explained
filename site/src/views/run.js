@@ -1,5 +1,5 @@
 import { createStage } from '../demos/_stage.js';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { loadScene } from './scene-loader.js';
 
 const STEP = { ok: ['通过', 'OK'], warn: ['有警告', 'Warning'], fail: ['失败', 'Failed'], skipped: ['跳过', 'Skipped'] };
 
@@ -49,30 +49,16 @@ export function renderRun(view, { t, L, base, data }) {
 
   const el = document.getElementById('viewer');
   const stage = createStage(el, { camPos: [1.6, 1.0, 1.9], target: [0, 0.15, 0] });
-  const loader = new GLTFLoader();
   let current = null;
   const show = (path, label) => {
     document.getElementById('viewer-label').textContent = label;
-    loader.load(`${base}${path}`, (g) => {
-      if (current) stage.scene.remove(current);
-      current = g.scene;
-      const box = new stage.THREE.Box3().setFromObject(current);
-      const size = box.getSize(new stage.THREE.Vector3());
-      const s = 1.6 / Math.max(size.x, size.y, size.z);
-      current.scale.setScalar(s);
-      const c = box.getCenter(new stage.THREE.Vector3()).multiplyScalar(s);
-      current.position.set(-c.x, -box.min.y * s, -c.z);
-      // Blender's procedural wood/glow node trees do not survive glTF export; restore them by material name.
-      current.traverse((o) => {
-        if (!o.isMesh) return;
-        o.castShadow = true;
-        o.receiveShadow = true;
-        const name = o.material?.name || '';
-        if (name.startsWith('wood')) o.material.color.set(0x7a3f1c);
-        if (name.startsWith('glow')) o.material.emissive.set(0xff6a00);
-      });
-      stage.scene.add(current);
-      stage.controls.target.set(0, size.y * s * 0.4, 0);
+    loadScene(stage, `${base}${path}`, {
+      span: 1.6,
+      onLoad: ({ root, size }) => {
+        if (current) stage.scene.remove(current);
+        current = root;
+        stage.controls.target.set(0, size.y * 0.4, 0);
+      },
     });
   };
   const first = run.scene?.model;
