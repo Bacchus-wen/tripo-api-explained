@@ -8,7 +8,8 @@ const LAYERS = [
 
 export function renderModules(view, { t, L, data }) {
   const roles = [
-    ['Claude', t('编排与验收评审：写订单和提示词，入库前看四视角图打分、决定通过或退回', 'Orchestration & acceptance: writes orders and prompts, scores four-view renders and decides pass or route-back before the library')],
+    ['Claude Opus 5.5', t('拆解与编排、操控 Blender 搭场景和氛围、入库前拍板', 'Decomposition and orchestration, drives Blender for scene and mood, final call before the library')],
+    ['Codex · Astra', t('生图做材质、写 Blender 脚本补建模', 'Images for materials, Blender scripts for missing parts')],
     ['Tripo API', t('出图与建模：文生图、图生图、图生 3D', 'Images and models: text-to-image, image-to-image, image-to-3D')],
     ['Grok · inspect_asset.py', t('只读结构质检：网格、面数、UV、贴图', 'Read-only structural QA: meshes, triangles, UVs, textures')],
     ['Blender', t('无界面脚本：清理、组装、渲染、导出验证', 'Headless scripts: clean, assemble, render, export checks')],

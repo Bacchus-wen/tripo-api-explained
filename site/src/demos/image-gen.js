@@ -19,7 +19,7 @@ const CSS = `
 .d-imagegen{position:absolute;inset:0;display:flex;flex-direction:column;gap:10px;padding:14px 16px;box-sizing:border-box;color:#e8e6e1;font-size:13px}
 .d-imagegen .ig-main{flex:1;min-height:0;display:grid;grid-template-columns:1.45fr 64px 1fr;gap:0}
 .d-imagegen .ig-col{display:flex;flex-direction:column;min-height:0;gap:6px}
-.d-imagegen .ig-tag{font-size:12px;color:#9aa0ad;letter-spacing:.02em}
+.d-imagegen .ig-tag{font-size:12px;color:#9aa0ad;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .d-imagegen .ig-tag b{color:#ffb347;font-weight:600;margin-right:6px}
 .d-imagegen .ig-concept{flex:1;min-height:0;position:relative;display:flex;align-items:center;justify-content:center}
 .d-imagegen .ig-concept img{max-width:100%;max-height:100%;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.45);opacity:0;transform:scale(.97);transition:opacity .7s,transform .7s}
@@ -68,7 +68,7 @@ export default function mount(el, { t, base }) {
     </div>
     <div></div>
     <div class="ig-col">
-      <div class="ig-tag"><b>②</b>${t('图生图 · 逐个抠出道具', 'Image-to-image · isolate each prop')} · <code>input = task_id</code></div>
+      <div class="ig-tag"><b>②</b>${t('图生图 · 逐个抠出道具', 'Image-to-image · one prop each')} · <code>input = task_id</code></div>
       <div class="ig-props"></div>
     </div>`;
   el.appendChild(main);

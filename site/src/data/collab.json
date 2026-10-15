@@ -1,0 +1,262 @@
+{
+ "roles": [
+  {
+   "id": "opus",
+   "who": "Claude Opus 5.5",
+   "color": "#e8b07a",
+   "what": {
+    "zh": "想清楚怎么拆、怎么组合；直接操控 Blender 搭场景、调灯光和氛围、摆镜头；最后拍板通过还是回炉。",
+    "en": "Plans how to split and recombine; drives Blender to build the scene, light it and frame it; makes the final pass/rework call."
+   }
+  },
+  {
+   "id": "astra",
+   "who": "Codex · Astra",
+   "color": "#7cc4ff",
+   "what": {
+    "zh": "生图做材质：无缝贴图、局部重绘、干净的颜色图；写 Blender 建模脚本，补 Tripo 做不好的部件。",
+    "en": "Images for materials: seamless textures, repaints, clean colour maps; writes Blender modelling scripts for parts Tripo gets wrong."
+   }
+  },
+  {
+   "id": "tripo",
+   "who": "Tripo API",
+   "color": "#3fa7a0",
+   "what": {
+    "zh": "快速批量出单件底模；需要时用分件、重贴图、重拓扑、绑骨等后处理接口。",
+    "en": "Fast, parallel base models per piece; post-processing such as segmentation, re-texturing, retopology and rigging when needed."
+   }
+  },
+  {
+   "id": "grok",
+   "who": "Grok",
+   "color": "#c9a0e8",
+   "what": {
+    "zh": "跑只读结构质检（inspect_asset.py），搜参考；也可以当跨家评审。",
+    "en": "Runs read-only structural QA (inspect_asset.py) and finds references; can act as the cross-vendor critic."
+   }
+  },
+  {
+   "id": "blender",
+   "who": "Blender",
+   "color": "#e07a3f",
+   "what": {
+    "zh": "所有修改真正发生的地方：无界面脚本执行、渲染、导出验证。",
+    "en": "Where every change actually happens: headless scripts, renders, export checks."
+   }
+  }
+ ],
+ "flow": [
+  {
+   "who": "opus",
+   "title": {
+    "zh": "拆解",
+    "en": "Decompose"
+   },
+   "text": {
+    "zh": "复杂场景拆成 4 个单件 + 程序化桌面，先画平面图定尺寸。",
+    "en": "Split the scene into 4 pieces + a procedural table; plan sizes on a floor plan first."
+   }
+  },
+  {
+   "who": "tripo",
+   "title": {
+    "zh": "出单件",
+    "en": "Generate pieces"
+   },
+   "text": {
+    "zh": "每个单件一张参考图，并行图生 3D。",
+    "en": "One reference per piece, image-to-3D in parallel."
+   }
+  },
+  {
+   "who": "grok",
+   "title": {
+    "zh": "结构质检",
+    "en": "Structural QA"
+   },
+   "text": {
+    "zh": "4 个底模全部 pass。",
+    "en": "All 4 base models pass."
+   }
+  },
+  {
+   "who": "opus",
+   "title": {
+    "zh": "组装",
+    "en": "Assemble"
+   },
+   "text": {
+    "zh": "在 Blender 里按平面图组合、打光、出四视角图。",
+    "en": "Assemble from the plan in Blender, light it, render four views."
+   }
+  },
+  {
+   "who": "grok",
+   "title": {
+    "zh": "跨家评审",
+    "en": "Cross-vendor review"
+   },
+   "text": {
+    "zh": "另一家看图打分、列问题（本次实际由独立的 Claude 子代理完成：6 → 6.5 分）。",
+    "en": "Another vendor scores and lists flaws (this run used an independent Claude sub-agent: 6 → 6.5)."
+   }
+  },
+  {
+   "who": "opus",
+   "title": {
+    "zh": "分派修复",
+    "en": "Dispatch fixes"
+   },
+   "text": {
+    "zh": "每个问题交给最合适的那一家，通过 team-sync 任务板派活，互不踩文件。",
+    "en": "Each flaw goes to the best-suited AI via the team-sync task board, without file clashes."
+   }
+  },
+  {
+   "who": "astra",
+   "title": {
+    "zh": "回炉",
+    "en": "Rework"
+   },
+   "text": {
+    "zh": "材质、补件、氛围并行修，修完再评审，直到 9 分。",
+    "en": "Materials, missing parts and mood fixed in parallel, then reviewed again until 9/10."
+   }
+  }
+ ],
+ "fixes": [
+  {
+   "id": "glass",
+   "target": [
+    0.18,
+    0.16,
+    0.0
+   ],
+   "owner": "astra",
+   "title": {
+    "zh": "评审台的玻璃罩变成了不透明半壳",
+    "en": "The critic rig's glass dome came out as an opaque shell"
+   },
+   "how": {
+    "zh": "Astra 写 Blender 脚本，建一个透明玻璃圆柱和发光环，替换掉这个部件；Opus 负责摆位和打光。",
+    "en": "Astra scripts a transparent glass cylinder and glowing ring in Blender to replace that part; Opus places and lights it."
+   },
+   "tripo": {
+    "zh": "或者用 Tripo 分件（/mesh/segment，40 credits）把罩子拆出来，再单独换材质。",
+    "en": "Or split it out with Tripo segmentation (/mesh/segment, 40 credits) and re-material it."
+   },
+   "tripoFeature": "segmentation"
+  },
+  {
+   "id": "texture",
+   "target": [
+    -0.55,
+    0.15,
+    0.0
+   ],
+   "owner": "astra",
+   "title": {
+    "zh": "打印机贴图有涂抹，货架上的城堡顶有黑斑",
+    "en": "Smeared printer texture, black smudges on the shelf castles"
+   },
+   "how": {
+    "zh": "Astra 生图出干净的颜色图，或对贴图做局部重绘，再由 Opus 接回材质节点。",
+    "en": "Astra generates a clean colour map or repaints the texture; Opus wires it back into the material."
+   },
+   "tripo": {
+    "zh": "或者用 Tripo 重新贴图（/models/texture，HD 20 credits），传入原参考图。",
+    "en": "Or re-texture with Tripo (/models/texture, HD 20 credits) using the original reference."
+   },
+   "tripoFeature": "texture-pbr"
+  },
+  {
+   "id": "wood",
+   "target": [
+    0.0,
+    0.0,
+    -0.1
+   ],
+   "owner": "astra",
+   "title": {
+    "zh": "桌面木纹太淡，导出到网页后变成白色",
+    "en": "Table grain too faint, and it turns white once exported to the web"
+   },
+   "how": {
+    "zh": "Astra 生一张无缝胡桃木贴图，替换 Blender 的程序化节点。贴图能正常导出到 glTF，网页里也会显示正确。",
+    "en": "Astra generates a seamless walnut texture to replace the procedural nodes; image textures export to glTF, so the web view is right too."
+   },
+   "tripo": {
+    "zh": "生图本身可以走 Tripo text-to-image（seedream 5 credits）。",
+    "en": "The image itself can come from Tripo text-to-image (seedream, 5 credits)."
+   },
+   "tripoFeature": "image-gen"
+  },
+  {
+   "id": "mood",
+   "target": [
+    0.0,
+    0.06,
+    0.16
+   ],
+   "owner": "opus",
+   "title": {
+    "zh": "传送带走向不对，发光和氛围不够",
+    "en": "Belt routing is wrong; glow and mood are weak"
+   },
+   "how": {
+    "zh": "Opus 直接操控 Blender：让传送带依次串起四个工位，提高发光强度，加暖色主光、紫色霓虹和景深，调整低机位镜头。",
+    "en": "Opus drives Blender directly: route the belt through all four stations, raise emission, add a warm key, purple neon and depth of field, fix the low-angle camera."
+   },
+   "tripo": {
+    "zh": "这类工作不需要 Tripo。",
+    "en": "No Tripo needed here."
+   },
+   "tripoFeature": null
+  },
+  {
+   "id": "spikes",
+   "target": [
+    -0.18,
+    0.12,
+    0.0
+   ],
+   "owner": "tripo",
+   "title": {
+    "zh": "模型上有尖刺，三角面很乱",
+    "en": "Needle spikes and messy triangles"
+   },
+   "how": {
+    "zh": "Opus 在 Blender 里删除游离点和退化面；面数或拓扑要求更高时，交给 Tripo 重拓扑。",
+    "en": "Opus deletes loose verts and degenerate faces in Blender; for stricter budgets hand it to Tripo retopology."
+   },
+   "tripo": {
+    "zh": "Tripo 重拓扑 v3.0（/mesh/decimate，三角 35 credits），可以加 smart_uv。",
+    "en": "Tripo retopology v3.0 (/mesh/decimate, tris 35 credits), optionally with smart_uv."
+   },
+   "tripoFeature": "retopology"
+  },
+  {
+   "id": "review",
+   "target": [
+    0.55,
+    0.2,
+    0.0
+   ],
+   "owner": "grok",
+   "title": {
+    "zh": "评审不应该由同一家来做",
+    "en": "Review shouldn’t come from the same vendor"
+   },
+   "how": {
+    "zh": "下一轮改走 team-sync 任务板，交给 Grok 或 Codex 评审，减少自己给自己打分的偏差。",
+    "en": "Next round goes through the team-sync board to Grok or Codex, avoiding self-grading bias."
+   },
+   "tripo": {
+    "zh": "与 Tripo 无关。",
+    "en": "Not a Tripo task."
+   },
+   "tripoFeature": null
+  }
+ ]
+}

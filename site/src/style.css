@@ -118,7 +118,7 @@ figcaption { font-size: 12px; color: var(--muted); margin-top: 4px; }
 .metrics i { font-style: normal; color: var(--dim); margin-right: 6px; }
 .lightbox { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; background: rgba(0, 0, 0, 0.86); cursor: zoom-out; }
 .lightbox img { max-width: 92vw; max-height: 90vh; border-radius: 10px; }
-.roles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 24px 0; }
+.roles { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 24px 0; }
 .roles div { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; font-size: 13px; }
 .roles b { display: block; margin-bottom: 4px; }
 .roles span { color: var(--muted); }
@@ -146,3 +146,30 @@ figcaption { font-size: 12px; color: var(--muted); margin-top: 4px; }
   .brand small, .foot span { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+
+/* multi-AI collaboration */
+.team { max-width: 1240px; margin: 0 auto; padding: 36px 24px 60px; }
+.roles-5 { grid-template-columns: repeat(5, 1fr); }
+.roles-5 div { border-top: 3px solid var(--c); }
+.roles-5 b { display: flex; align-items: center; gap: 6px; }
+.roles-5 .swatch { background: var(--c); }
+.flow { list-style: none; display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; padding: 0; margin: 8px 0 34px; counter-reset: f; }
+.flow li { position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; font-size: 13px; }
+.flow li::after { content: '→'; position: absolute; right: -9px; top: 14px; color: var(--dim); }
+.flow li:last-child::after { content: '↺'; }
+.flow-n { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--c); color: var(--bg); font-size: 11px; font-weight: 700; margin-right: 6px; }
+.flow small { display: block; color: var(--c); margin: 4px 0; }
+.flow p { margin: 0; color: var(--muted); }
+.team-h2 { font-size: 22px; margin: 10px 0 4px; }
+.team-split { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; }
+.team-split .viewer { height: 520px; }
+.fixes { display: flex; flex-direction: column; gap: 6px; }
+.fix { text-align: left; background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--c); border-radius: 10px;
+  padding: 9px 12px; color: var(--ink); cursor: pointer; font: inherit; font-size: 13px; }
+.fix:hover { border-color: var(--muted); border-left-color: var(--c); }
+.fix.on { background: var(--panel-2); border-color: var(--c); }
+.fix-owner { display: block; font-size: 11px; color: var(--c); letter-spacing: 0.04em; }
+.fix-detail { margin-top: 6px; padding: 4px 4px 0; }
+.fix-detail h5 { margin: 12px 0 4px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); }
+.fix-detail p { margin: 0; color: #d6d3cd; font-size: 14px; }
+@media (max-width: 1100px) { .roles-5, .flow, .team-split { grid-template-columns: 1fr; } .flow li::after { display: none; } }

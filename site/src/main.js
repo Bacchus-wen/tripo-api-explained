@@ -2,6 +2,7 @@ import './style.css';
 import api from './data/tripo-api.json';
 import { renderRun } from './views/run.js';
 import { renderModules } from './views/modules.js';
+import { renderTeam } from './views/team.js';
 
 const demos = import.meta.glob('./demos/[!_]*.js');
 const BASE = `${import.meta.env.BASE_URL}data/`;
@@ -9,7 +10,7 @@ const BASE = `${import.meta.env.BASE_URL}data/`;
 const state = {
   lang: localStorage.getItem('lang') || 'zh',
   view: location.hash.replace('#', '') || 'hall',
-  feature: api.features[0].id,
+  feature: api.features.some((f) => f.id === localStorage.getItem('feature')) ? localStorage.getItem('feature') : api.features[0].id,
   data: null,
 };
 const t = (zh, en) => (state.lang === 'zh' ? zh : en);
@@ -37,7 +38,7 @@ function shell() {
         </div>
       </div>
       <nav class="tabs">
-        ${[['hall', '能力馆', 'Feature Hall'], ['run', '真实流程', 'Real Run'], ['modules', '产线模块', 'Pipeline']]
+        ${[['hall', '能力馆', 'Feature Hall'], ['team', '多 AI 协作', 'Multi-AI'], ['run', '真实流程', 'Real Run'], ['modules', '产线模块', 'Pipeline']]
           .map(([id, zh, en]) => `<a href="#${id}" class="${state.view === id ? 'on' : ''}">${t(zh, en)}</a>`).join('')}
       </nav>
       <button class="lang" id="lang">${state.lang === 'zh' ? 'EN' : '中文'}</button>
@@ -73,6 +74,7 @@ function hall(view) {
     </section>`;
   view.querySelectorAll('.feat').forEach((b) => b.addEventListener('click', () => {
     state.feature = b.dataset.id;
+    localStorage.setItem('feature', state.feature);
     view.querySelectorAll('.feat').forEach((x) => x.classList.toggle('on', x === b));
     showFeature();
   }));
@@ -128,7 +130,8 @@ async function render() {
   if (state.view === 'hall') return hall(view);
   state.data ??= await fetch(`${BASE}index.json`).then((r) => r.json()).catch(() => ({ modules: [], runs: [], images: [] }));
   const ctx = { lang: state.lang, t, L, base: BASE, data: state.data, statusChip };
-  cleanupView = state.view === 'run' ? renderRun(view, ctx) : renderModules(view, ctx);
+  const views = { run: renderRun, team: renderTeam, modules: renderModules };
+  cleanupView = (views[state.view] || renderModules)(view, ctx);
 }
 
 window.addEventListener('hashchange', () => {
